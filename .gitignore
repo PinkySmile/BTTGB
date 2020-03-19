@@ -1,0 +1,13 @@
+*.o
+*~
+*.gb
+*.gbc
+*.sym
+*.sav
+*.fx
+*.cfx
+*.zfx
+*.zcfx
+*.exe
+.idea
+tools/compressor
