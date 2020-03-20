@@ -57,7 +57,7 @@ run::
 	ld de, VRAM_START + PLAYER_SPRITE_NBR
 	ld hl, GameSprites
 	ld bc, GameSpritesEnd - GameSprites
-	call uncompress
+	call copyMemory
 
 	ld a, 0
 	ld hl, playerPal
