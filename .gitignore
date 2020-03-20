@@ -9,5 +9,6 @@
 *.zfx
 *.zcfx
 *.exe
+*.pal
 .idea
 tools/compressor
