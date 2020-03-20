@@ -56,10 +56,10 @@ setGBCPalette::
 	ld a, [HARDWARE_TYPE]
 	or a
 
-.noCheck:
 	; If we are on Gameboy, no need to change palette
 	ret z
 
+.noCheck:
 	ld a, d
 
 	; Enable auto increment
