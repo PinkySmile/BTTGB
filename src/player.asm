@@ -43,6 +43,8 @@ initPlayers::
 ;    de -> Not preserved
 ;    hl -> Not preserved
 updatePlayer::
+	call executePlayerActions
+
 	ld hl, OAM_SRC_START
 	ld d, h
 	ld e, l
@@ -94,9 +96,26 @@ executePlayerActions::
 	ret
 
 .right::
+	ld hl, PLAYER_STRUCT + BASIC_OBJECT_STRUCT_X_SPEED_OFF
+
+	xor a
+	or [hl]
+	jp z, .moveRight
+
+	bit 7, [hl]
+	ret z
+
+.moveRight:
+	inc [hl]
 	ret
 
 .left::
+	ld hl, PLAYER_STRUCT + BASIC_OBJECT_STRUCT_X_SPEED_OFF
+
+	bit 7, [hl]
+	ret nz
+
+	dec [hl]
 	ret
 
 .up::
