@@ -28,6 +28,7 @@ initDMA_end:
 ;    de -> Not preserved
 ;    hl -> Not preserved
 init::
+	push af
 	reg INTERRUPT_ENABLED, VBLANK_INTERRUPT
 	call waitVBLANK
 
@@ -38,7 +39,17 @@ init::
 	ld de, $C000
 	call fillMemory
 
-	ld hl, $FF24
+	pop af
+	dec a
+	ld [HARDWARE_TYPE], a
+
+	xor a
+	ld hl, DMGPal
+	ld bc, $8
+	ld e, BGPI & $FF
+	call setGBCPalette
+
+	ld hl, CHANNEL_CONTROL
 	ld a, $77
 	ld [hli], a
 	ld a, $FF

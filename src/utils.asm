@@ -87,60 +87,6 @@ random::
 	pop hl
 	ret
 
-; Copies a chunk of memory into another
-; Params:
-;    bc -> The length of the chunk to copy
-;    de -> The destination address
-;    hl -> The source address
-; Return:
-;    None
-; Registers:
-;    af -> Not preserved
-;    bc -> Not preserved
-;    de -> Not preserved
-;    hl -> Not preserved
-copyMemory::
-	xor a ; Check if size is 0
-	or b
-	or c
-	ret z
-
-	; Copy a byte of memory from hl to de
-	ld a, [hli]
-	ld [de], a
-	inc de
-	dec bc
-	jr copyMemory ; Recurse until bc is 0
-
-; Fill a chunk of memory with a single value
-; Params:
-;    a  -> Value to fill
-;    bc -> The length of the chunk to copy
-;    de -> The destination address
-; Return:
-;    None
-; Registers:
-;    af -> Not preserved
-;    bc -> Not preserved
-;    de -> Not preserved
-;    hl -> Preserved
-fillMemory::
-	push af ; Save a
-	xor a   ; Check if bc is 0
-	or b
-	or c
-	jr z, .return
-	pop af
-
-	; Load a into de
-	ld [de], a
-	inc de
-	dec bc
-	jr fillMemory ; Recurse intil bc is 0
-.return: ; End of recursion
-	pop af
-	ret
-
 ; Wait for VBLANK. Only returns when a VBLANK occurs.
 ; Params:
 ;    None
@@ -164,27 +110,6 @@ waitVBLANK::
 	halt   ; Wait for interrupt
 	pop af ; Restore old interrupt enabled
 	ld [INTERRUPT_ENABLED], a
-	ret
-
-; Displays text on screen.
-; Params:
-;    bc -> Length of the text.
-;    hl -> Pointer to the start of the text.
-; Return:
-;    None
-; Registers:
-;    af -> Not preserved
-;    bc -> Not preserved
-;    de -> Not preserved
-;    hl -> Not preserved
-displayText::
-	call waitVBLANK
-	reset LCD_CONTROL
-	ld de, VRAM_BG_START
-	call copyMemory
-	reset SCROLL_X
-	reset SCROLL_Y
-	reg LCD_CONTROL, LCD_BASE_CONTROL
 	ret
 
 ; Wait for VBLANK. Only returns when a VBLANK occurs.
@@ -285,19 +210,3 @@ getKeysFiltered::
 	ld [hl], a
 	ld a, c
 	ret
-
-writeNumber::
-    ld b, a
-
-    swap a
-    and a, $F
-    add a, $30
-    ld [de], a
-    inc de
-
-    ld a, b
-    and a, $F
-    add a, $30
-    ld [de], a
-    inc de
-    ret

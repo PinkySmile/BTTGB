@@ -16,3 +16,5 @@ JAMLetters::
  	incbin "assets/biga.zfx"
  	incbin "assets/bigm.zfx"
 JAMLettersEnd::
+
+include "src/palettes.asm"

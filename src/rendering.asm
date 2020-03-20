@@ -37,3 +37,43 @@ loadSprites::
 	ld bc, JAMLettersEnd - JAMLetters
 	jp uncompress
 
+; Change the GBC palette
+; Params:
+;    a  -> The index of the palette
+;    hl -> New palette to load
+;    e  -> The lowest byte of the address to stream palette index
+;    bc -> The size of the palette
+; Return:
+;    None
+; Registers:
+;    af -> Not preserved
+;    bc -> Not preserved
+;    de -> Not preserved
+;    hl -> Not preserved
+setGBCPalette::
+	; Check if on Gameboy or Gameboy Color
+	ld d, a
+	ld a, [HARDWARE_TYPE]
+	or a
+
+	; If we are on Gameboy, no need to change palette
+	ret z
+
+	ld a, d
+
+	; Multiply index by 8
+	rla
+	rla
+	rla
+	and %11111000
+
+	; Enable auto increment
+	set 7, a
+
+	; Load index to palette index
+	ld d, $FF
+	ld [de], a
+
+	; Stream data to the palette data
+	inc de
+	jp copyMemorySingleAddr

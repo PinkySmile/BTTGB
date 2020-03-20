@@ -57,6 +57,7 @@ run::
 include "src/init.asm"
 include "src/fatal_error.asm"
 include "src/utils.asm"
+include "src/strutils.asm"
 include "src/interrupts.asm"
 include "src/rendering.asm"
 include "src/player.asm"
