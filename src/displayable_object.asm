@@ -34,13 +34,21 @@ displayObject:
 .loopY:
 	ld c, 0
 .loopX:
+	inc hl
+	inc hl
+	inc hl
 	ld a, b
 	add $10
+	add [hl]
 	ld [de], a
 	inc de
+	dec hl
+	dec hl
+	dec hl
 
 	ld a, c
 	add $8
+	add [hl]
 	ld [de], a
 	inc de
 
@@ -113,12 +121,20 @@ displayObjectReversed:
 	ld a, [hl-]
 	ld c, a
 .loopX:
+	inc hl
+	inc hl
+	inc hl
 	ld a, b
 	add $10
+	add [hl]
 	ld [de], a
 	inc de
+	dec hl
+	dec hl
+	dec hl
 
 	ld a, c
+	add [hl]
 	ld [de], a
 	inc de
 

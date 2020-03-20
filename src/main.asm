@@ -70,6 +70,12 @@ run::
 .gameLoop:
 	reset INTERRUPT_REQUEST
 	halt
+
+	xor a
+	ld de, OAM_SRC_START
+	ld bc, $9F
+	call fillMemory
+
 	call updatePlayer
 	jr .gameLoop
 
