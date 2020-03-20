@@ -26,14 +26,22 @@ initGravity::
 updateGravity::
     xor a
     ld hl, GRAVITY_TIMER
-    cmp [hl], a
+    cp [hl], a
     jr nz, .isFalling
     ld [hl], GRAVITY_CONSTANT
     ld hl, PLAYER_STRUCT
     add hl, 6
     dec [hl]
+    cp [hl], -7
+    jr nc, .cap
+    ret
+
     .isFalling:
         dec [hl]
+    ret
+
+    .cap:
+        ld [hl], -7
     ret
 
 
