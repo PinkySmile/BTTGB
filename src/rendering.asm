@@ -56,16 +56,11 @@ setGBCPalette::
 	ld a, [HARDWARE_TYPE]
 	or a
 
+.noCheck:
 	; If we are on Gameboy, no need to change palette
 	ret z
 
 	ld a, d
-
-	; Multiply index by 8
-	rla
-	rla
-	rla
-	and %11111000
 
 	; Enable auto increment
 	set 7, a

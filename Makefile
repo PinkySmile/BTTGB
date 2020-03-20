@@ -48,10 +48,13 @@ COMPRESSED_COLORED_IMGS = \
 
 COMPRESSED_COLORED_IMGS_FX = $(COMPRESSED_COLORED_IMGS:%.png=%.zcfx)
 
-all:	tools/compressor $(NAME).gbc
+all:	tools/compressor tools/palette_fixer $(NAME).gbc
 
 tools/compressor:
 	$(MAKE) -C tools compressor
+
+tools/palette_fixer:
+	$(MAKE) -C tools palette_fixer
 
 run:	re
 	wine "$(BGB_PATH)" ./$(NAME).gbc
@@ -71,6 +74,7 @@ runw:	re
 
 %.zcfx : %.png
 	$(FX) $(FXFLAGS) -P -o $@ $<
+	tools/palette_fixer $(@:%.zcfx=%.pal)
 	tools/compressor $@
 
 %.o : %.asm
@@ -85,7 +89,9 @@ clean:
 	$(RM) $(OBJS) $(IMGS_FX) $(COMPRESSED_IMGS_FX) $(COMPRESSED_COLORED_IMGS_FX) $(COLORED_IMGS_FX)
 
 fclean:	clean
-	$(MAKE) -C tools fclean
 	$(RM) $(NAME).gbc
+
+ffclean: fclean
+	$(MAKE) -C tools fclean
 
 re:	fclean all

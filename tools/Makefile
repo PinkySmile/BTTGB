@@ -1,9 +1,3 @@
-NAME =	compressor
-
-SRC =	compressor.c
-
-OBJ =	$(SRC:%.c=%.o)
-
 INC =
 
 LDFLAGS =
@@ -19,14 +13,17 @@ LIBS =
 
 all:	$(LIBS) $(NAME)
 
-$(NAME):$(OBJ)
-	$(CC) -o $(NAME) $(OBJ) $(LDFLAGS)
+compressor:compressor.o
+	$(CC) -o compressor compressor.o $(LDFLAGS)
+
+palette_fixer:palette_fixer.o
+	$(CC) -o palette_fixer palette_fixer.o $(LDFLAGS)
 
 clean:
 	$(RM) $(OBJ)
 
 fclean:	clean
-	$(RM) $(NAME) $(NAME).exe
+	$(RM) palette_fixer palette_fixer.exe compressor compressor.exe
 
 ffclean:fclean
 

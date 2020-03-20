@@ -60,6 +60,7 @@ init::
 	ld hl, initDMA
 	call copyMemory
 
+	reg BGP,  DMG_BG_PALETTE
 	reg OBP0, DMG_OBP0_PALETTE
 	reg OBP1, DMG_OBP1_PALETTE
 
