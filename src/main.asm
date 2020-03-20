@@ -54,7 +54,7 @@ run::
 	call waitVBLANK
 	reset LCD_CONTROL
 	xor a
-	ld de, VRAM_START + PLAYER_SPRITE_NBR
+	ld de, VRAM_START + PLAYER_SPRITE_NBR * $10
 	ld hl, GameSprites
 	ld bc, GameSpritesEnd - GameSprites
 	call copyMemory
