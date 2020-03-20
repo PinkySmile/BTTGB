@@ -12,3 +12,4 @@
 *.pal
 .idea
 tools/compressor
+tools/palette_fixer
