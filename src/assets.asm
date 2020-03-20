@@ -17,4 +17,9 @@ JAMLetters::
  	incbin "assets/bigm.zfx"
 JAMLettersEnd::
 
+; All the sprites needed by the game
+GameSprites::
+	incbin "assets/player/player_idle/player_idle1.cfx"
+GameSpritesEnd::
+
 include "src/palettes.asm"
