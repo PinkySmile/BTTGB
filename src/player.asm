@@ -9,25 +9,26 @@
 ;    de -> Not preserved
 ;    hl -> Not preserved
 initPlayers::
-	ld b,b
-	xor a
 	ld hl, PLAYER_STRUCT
+
+	ld a, $40
 	ld [hli], a ; BASIC_OBJECT_STRUCT_X_OFF
-	inc hl ; Skip the X size
+	ld a, $10
+	ld [hli], a ; X SIZE
+	xor a
 	ld [hli], a ; BASIC_OBJECT_STRUCT_X_SPEED_OFF
+
+	ld a, $70
 	ld [hli], a ; BASIC_OBJECT_STRUCT_Y_OFF
-	inc hl ; Skip the Y size
+	ld a, $10
+	ld [hli], a ; Y SIZE
+	xor a
 	ld [hli], a ; BASIC_OBJECT_STRUCT_Y_SPEED_OFF
-	ld a, PLAYER_SPRITE_NBR
+
+	ld a, 2
 	ld [hli], a ; DISPLAYABLE_OBJECT_STRUCT_SPRITE
 	ld a, %0001
 	ld [hli], a ; DISPLAYABLE_OBJECT_STRUCT_ORIENTATION
-
-	ld a, $10
-	ld hl, PLAYER_STRUCT + BASIC_OBJECT_STRUCT_X_SIZE_OFF
-	ld [hl], a
-	ld hl, PLAYER_STRUCT + BASIC_OBJECT_STRUCT_Y_SIZE_OFF
-	ld [hl], a
 
 	ret
 
@@ -46,7 +47,6 @@ updatePlayer::
 	ld d, h
 	ld e, l
 	ld hl, PLAYER_STRUCT
-	ld b, b
 	call renderDisplayableObject
 	ret
 
