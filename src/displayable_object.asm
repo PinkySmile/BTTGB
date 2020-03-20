@@ -29,7 +29,7 @@ displayObject:
 	pop hl
 	push af
 
-	ld bc, 0
+	ld b, 0
 .loopY:
 	ld c, 0
 .loopX:
@@ -46,6 +46,7 @@ displayObject:
 	pop af
 	ld [de], a
 	inc de
+	inc a
 	push af
 
 	push hl
@@ -90,11 +91,73 @@ displayObject:
 	ret
 
 displayObjectReversed:
-	;a = this->sprite + (this->sizeY + 1) * this->sizeX / 8;
-	;for (int y = a->sizeY; y > 0; y -= 8) {
-	;	for (int x = a->sizeX; x > 0; x -= 8) {
-	;		printSprite(x, y, a, fliped, fliped);
-	;		a--;
-	;	}
-	;}
+	dec hl
+	ld a, [hl]
+	pop hl
+	push af
+
+	inc hl
+	ld b, a
+	ld a, [hl]
+	rra
+	rra
+	rra
+	and %00011111
+	add b
+	dec hl
+
+	ld b, 0
+.loopY:
+	ld c, 0
+.loopX:
+	ld a, b
+	add $10
+	ld [de], a
+	inc de
+
+	ld a, c
+	add $8
+	ld [de], a
+	inc de
+
+	pop af
+	ld [de], a
+	inc de
+	dec a
+	push af
+
+	push hl
+	xor a
+	ld a, l
+	add DISPLAYABLE_OBJECT_STRUCT_ORIENTATION
+	ld l, a
+	ld a, h
+	adc $0
+	ld h, a
+	ld a, [hl]
+	pop hl
+	jr nz, .loopX
+
+	push hl
+	inc hl
+	push bc
+	ld b, a
+	ld a, [hl+]
+	rra
+	rra
+	rra
+	and %00011111
+	add b
+	pop bc
+
+	inc hl
+	inc hl
+	ld a, b
+	add $8
+	ld b, a
+	cp [hl]
+	pop hl
+	jr c, .loopY
+
+	pop af
 	ret
