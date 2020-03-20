@@ -21,7 +21,7 @@ renderDisplayableObject::
 	ld h, a
 
 	ld a, [hl]
-	or a
+	bit 0, a
 	jr z, displayObjectReversed
 
 displayObject:
@@ -109,7 +109,9 @@ displayObjectReversed:
 
 	ld b, 0
 .loopY:
-	ld c, 0
+	inc hl
+	ld a, [hl-]
+	ld c, a
 .loopX:
 	ld a, b
 	add $10
@@ -117,14 +119,13 @@ displayObjectReversed:
 	inc de
 
 	ld a, c
-	add $8
 	ld [de], a
 	inc de
 
 	pop af
 	ld [de], a
 	inc de
-	dec a
+	inc a
 	push af
 
 	push hl
@@ -137,20 +138,21 @@ displayObjectReversed:
 	ld h, a
 	ld a, [hl]
 	pop hl
-	jr nz, .loopX
+
+	or %00100000
+	ld [de], a
+	inc de
+
+	ld a, c
+	sub $8
+	ld c, a
+	dec a
+	cp $F8
+	jr c, .loopX
 
 	push hl
 	inc hl
-	push bc
-	ld b, a
-	ld a, [hl+]
-	rra
-	rra
-	rra
-	and %00011111
-	add b
-	pop bc
-
+	inc hl
 	inc hl
 	inc hl
 	ld a, b
