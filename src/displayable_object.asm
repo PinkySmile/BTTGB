@@ -2,6 +2,7 @@
 ; Params:
 ;    de -> Address to place the sprites to
 ;    hl -> Object to render
+
 ; Return:
 ;    de -> The address of the next sprite
 ; Registers:

@@ -38,7 +38,7 @@ COMPRESSED_IMGS = \
 COMPRESSED_IMGS_FX = $(COMPRESSED_IMGS:%.png=%.zfx)
 
 
-COLORED_IMGS =
+COLORED_IMGS = assets/player/player_idle/player_idle1.png
 
 COLORED_IMGS_FX = $(COLORED_IMGS:%.png=%.cfx)
 

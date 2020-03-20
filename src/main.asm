@@ -49,9 +49,28 @@ mainMenu::
 
 ; Runs the main program
 run::
+	ei
+	reg INTERRUPT_ENABLED, VBLANK_INTERRUPT
+	call waitVBLANK
+	reset LCD_CONTROL
+	xor a
+	ld de, VRAM_START + PLAYER_SPRITE_NBR
+	ld hl, GameSprites
+	ld bc, GameSpritesEnd - GameSprites
+	call uncompress
+
+	ld a, 0
+	ld hl, playerPal
+	ld e, OBPI & $FF
+	ld bc, 8
+	call setGBCPalette
+	reg LCD_CONTROL, LCD_BASE_CONTROL
+
+	call initPlayers
 .gameLoop:
 	reset INTERRUPT_REQUEST
 	halt
+	call updatePlayer
 	jr .gameLoop
 
 include "src/init.asm"
@@ -66,3 +85,4 @@ include "src/intro.asm"
 include "src/basic_object.asm"
 include "src/text.asm"
 include "src/credits.asm"
+include "src/displayable_object.asm"
