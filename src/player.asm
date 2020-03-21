@@ -333,7 +333,6 @@ collideLeft::
 	ld a, [PLAYER_STRUCT + BASIC_OBJECT_STRUCT_X_SPEED_OFF]
 	bit 7, a ; bit clear the carry flag
 	ret z
-	ld b, a
 
 	scf ; set the carry flag
 	ret
@@ -377,7 +376,6 @@ collideRight::
 	ret nz
 	or a ; or clear the carry flag
 	ret z
-	ld b, a
 
 	scf ; set the carry flag
 	ret
@@ -419,7 +417,6 @@ collideBelow::
 	ret nz
 	or a
 	ret z
-	ld b, a
 
 	scf ; set the carry flag
 	ret
