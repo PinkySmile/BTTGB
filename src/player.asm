@@ -152,8 +152,8 @@ movePlayer::
 
 .moveX:
 	; Check collisions.
-	call collideLeft
-	jr c, collidedLeft
+	;call collideLeft
+	;jr c, collidedLeft
 
 	; Initialize value for the move.
 	ld a, [PLAYER_STRUCT + BASIC_OBJECT_STRUCT_X_SPEED_OFF]
