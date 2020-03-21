@@ -36,10 +36,10 @@ initPlayers::
 
 	ld a, [MAP + MAP_SIZE_Y_OFF]
 	ld c, a
-	ld b, PLAYER_POSITION_Y + 1
+	ld b, PLAYER_POSITION_Y / 8 + 1
 	ld a, MAP & $FF + MAP_SIZE_TILES_OFF
 
-	add PLAYER_POSITION_X
+	add PLAYER_POSITION_X / 8
 	jr c, .overflow
 .loop:
 	add c
@@ -72,8 +72,7 @@ updatePlayer::
 	ld e, l
 	ld hl, PLAYER_STRUCT
 	call renderDisplayableObject
-	call movePlayer
-	ret
+	jp movePlayer
 
 ; Read input and execute the actions associated.
 ; Params:
@@ -103,8 +102,7 @@ executePlayerActions::
 	bit 6, b
 	call z, .select
 	bit 7, b
-	call z, .start
-	ret
+	jp z, .start
 
 .b::
 	ret
@@ -183,10 +181,10 @@ movePlayer::
 	jp updateCameraH
 
 .moveY:
-	;ld b, b
 	ld a, [PLAYER_STRUCT + BASIC_OBJECT_STRUCT_Y_SPEED_OFF]
 	or a
 	ret z
+	ld b, b
 	ld d, a
 	ld b, a
 	ld a, [MAP + MAP_SIZE_Y_OFF]
@@ -200,19 +198,17 @@ movePlayer::
 	push af
 
 	; Minus operator - if the number is neg, replace $FB (-5) by 5 etc
-	push de
 	bit 7, d
 	jr nz, .neg
 
 	pop bc
 	pop af
 
-	and 8
+	and 7
 	ld c, a
 	ld a, b
-	and 8
+	and 7
 	cp c
-	pop de
 	ret nc
 	push de
 
@@ -222,24 +218,19 @@ movePlayer::
 	ld a, [hl]
 	add e
 	ld [hld], a
-
-	jr nc, .endLoopPos
+	jr nc, .updateCamera
 	inc [hl]
-.endLoopPos:
-	dec d
-	jr nz, .loopPos
 	jr .updateCamera
 
 .neg::
 	pop af
 	pop bc
 
-	and 8
+	and 7
 	ld c, a
 	ld a, b
-	and 8
+	and 7
 	cp c
-	pop de
 	ret nc
 	push de
 
@@ -249,11 +240,8 @@ movePlayer::
 	sub e
 	ld [hld], a
 
-	jr nc, .endLoopNeg
+	jr nc, .updateCamera
 	dec [hl]
-.endLoopNeg:
-	inc d
-	jr nz, .loopNeg
 
 .updateCamera:
 	pop de
