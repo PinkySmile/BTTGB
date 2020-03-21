@@ -2,7 +2,7 @@ copyMap::
 	ld a, [hli]
 	ld b, a
 	ld a, [hli]
-	add $06
+	add $42
 	ld c, a
 	ld a, b
 	adc $00
@@ -97,10 +97,25 @@ loadMap::
 	ld e, BGPI & $FF
 	call setGBCPalette
 
+	reg SCROLL_X, $8
+	reg SCROLL_Y, $8
+
+	ld b, b
+	ld a, [MAP + MAP_SIZE_X_OFF]
+	inc a
+
+	ld d, a
+	ld a, l
+	sub d
+	ld l, a
+	ld a, h
+	sbc $0
+	ld h, a
+
 	ld de, VRAM_BG_START
-	ld b, 18
+	ld b, 20
 .loop:
-	ld c, 20
+	ld c, 22
 .copyLoop:
 	ld a, [hli]
 
@@ -126,7 +141,7 @@ loadMap::
 	jr nz, .copyLoop
 
 	ld a, e
-	add 12
+	add 10
 	ld e, a
 	ld a, d
 	adc $00
@@ -137,7 +152,7 @@ loadMap::
 	ld a, [hl]
 	pop hl
 
-	sub 20
+	sub 22
 	add l
 	ld l, a
 	ld a, h
