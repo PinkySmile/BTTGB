@@ -169,7 +169,7 @@ collidedRight::
 	ret
 
 movePlayer::
-	ld de, .moveY
+	ld de, moveY
 	push de
 
 .moveX:
@@ -221,7 +221,16 @@ movePlayer::
 	dec [hl]
 	ret
 
-.moveY:
+collidedBelow::
+	ld hl, PLAYER_STRUCT + BASIC_OBJECT_STRUCT_Y_SPEED_OFF
+	dec [hl]
+	ret
+
+moveY::
+    ;check collisions on Y
+	call collideBelow
+	jr c, collidedBelow
+
 	ld a, [PLAYER_STRUCT + BASIC_OBJECT_STRUCT_Y_SPEED_OFF]
 	or a
 	ret z
@@ -368,6 +377,46 @@ collideRight::
 	ret nz
 	or a ; or clear the carry flag
 	ret z
+	ld b, a
+
+	scf ; set the carry flag
+	ret
+
+; Check left collisions for the player.
+; Params:
+;    None
+; Return:
+;    c -> set if the player collide.
+; Registers:
+;    af -> Not preserved
+;    bc -> Not preserved
+;    de -> Not preserved
+;    hl -> Not preserved
+collideBelow::
+	ld a, [MAP_PTR_H]
+	ld d, a
+	ld a, [MAP_PTR_L]
+	ld e, a ;Get the top left tile of the player
+
+	; Check for the lower half of the body.
+	ld a, [MAP + MAP_SIZE_X_OFF]
+	ld h, 0
+	ld l, a
+	add hl, de
+	ld a, [hl]
+	and TILE_IS_SOLID ; and clear the carry flag.
+	jr nz, .ok
+
+	inc hl
+	ld a, [hl]
+	and TILE_IS_SOLID
+	ret z
+
+	; Do not check collisions if the player moves to the right.
+.ok:
+	ld a, [PLAYER_STRUCT + BASIC_OBJECT_STRUCT_Y_SPEED_OFF]
+	bit 7, a ; bit clear the carry flag
+	ret nz
 	ld b, a
 
 	scf ; set the carry flag
