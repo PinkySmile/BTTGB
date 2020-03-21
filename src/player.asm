@@ -40,6 +40,7 @@ initPlayers::
 	ld a, MAP & $FF + MAP_SIZE_TILES_OFF
 
 	add PLAYER_POSITION_X / 8
+	sub 4 ; TODO Find why we need a -4 here and adapt it for every map.
 	jr c, .overflow
 .loop:
 	add c
@@ -138,7 +139,10 @@ executePlayerActions::
 
 .a::
 .up::
-	jp jump
+	call initGravity
+	ld hl, PLAYER_STRUCT + BASIC_OBJECT_STRUCT_Y_SPEED_OFF
+	ld [hl], -5
+	ret
 
 .down::
 	ret
@@ -167,18 +171,19 @@ movePlayer::
 
 	ld hl, SCROLL_X
 	ld a, [hl]
+	push af
 	add d
 	ld [hl], a
 
+	pop af
 	bit 7, d
 	jr nz, .negX
 	and 7
-	sub d
-	ret nc
+	cp 7
+	ret nz
 	jr .endNegX
 .negX:
 	and 7
-	add d
 	ret nz
 .endNegX:
 
@@ -266,13 +271,6 @@ movePlayer::
 	jp updateCameraV
 
 
-jump::
-	call initGravity
-	ld hl, PLAYER_STRUCT + BASIC_OBJECT_STRUCT_Y_SPEED_OFF
-	ld [hl], -5
-	ret
-
-
 ; Check left collisions for the player.
 ; Params:
 ;    None
@@ -287,8 +285,7 @@ collideLeft::
 	ld a, [MAP_PTR_H]
 	ld d, a
 	ld a, [MAP_PTR_L]
-	ld e, a
-	dec de ; Get the tile at the left of the player
+	ld e, a ;Get the top left tile of the player
 
 	; Do not collide if the tile is not solid
 	ld a, [de]
@@ -301,10 +298,12 @@ collideLeft::
 	ret z
 	ld b, a
 
-	; Calculate the offset of the player compared to the map tile
-	ld a, [SCROLL_X]
-	and 8
-	sub b ; a now contains the position of the player (in pixels) after the movement. 0 represent the left border of the current tile.
-
-	cp 0 ; If position < 0, then the player collide with the tile (he tries to move to the left tiles, else he is still in the current tile.
+	scf ; set the carry flag
 	ret
+;	; Calculate the offset of the player compared to the map tile
+;	ld a, [SCROLL_X]
+;	and 7
+;	sub b ; a now contains the position of the player (in pixels) after the movement. 0 represent the left border of the current tile.
+;
+;	cp 0 ; If position < 0, then the player collide with the tile (he tries to move to the left tiles, else he is still in the current tile.
+;	ret
