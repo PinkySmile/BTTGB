@@ -11,7 +11,6 @@ updateCameraH::
 	ret
 
 updateCameraV::
-	ld b, b
 	bit 7, d
 	jr nz, .up
 
