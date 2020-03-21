@@ -30,7 +30,6 @@ initPlayers::
 	ld a, %0001
 	ld [hli], a ; DISPLAYABLE_OBJECT_STRUCT_ORIENTATION
 
-	ld b, b
 	; Init the MAP_PTR.
 	ld a, [MAP + MAP_SIZE_X_OFF]
 	ld c, a
@@ -56,26 +55,6 @@ initPlayers::
 	inc hl
 	ld [hl], c
 	ret
-;	ld a, [MAP + MAP_SIZE_Y_OFF]
-;	ld c, a
-;	ld b, PLAYER_POSITION_Y / 8 + 1
-;	ld a, MAP & $FF + MAP_SIZE_TILES_OFF
-
-;	add PLAYER_POSITION_X / 8
-;	sub 4 ; TODO Find why we need a -4 here and adapt it for every map.
-;	jr c, .overflow
-;.loop:
-;	add c
-;	jr c, .overflow
-;.endLoop:
-;	dec b
-;	jr nz, .loop
-;	inc hl
-;	ld [hl], a
-;	ret
-;.overflow:
-;	inc [hl]
-;	jr .endLoop
 
 ; Update the player.
 ; Params:
@@ -176,6 +155,11 @@ collidedLeft::
 	inc [hl]
 	ret
 
+collidedRight::
+	ld hl, PLAYER_STRUCT + BASIC_OBJECT_STRUCT_X_SPEED_OFF
+	dec [hl]
+	ret
+
 movePlayer::
 	ld de, .moveY
 	push de
@@ -184,6 +168,8 @@ movePlayer::
 	; Check collisions.
 	call collideLeft
 	jr c, collidedLeft
+	call collideRight
+	jr c, collidedRight
 
 	; Initialize value for the move.
 	ld a, [PLAYER_STRUCT + BASIC_OBJECT_STRUCT_X_SPEED_OFF]
@@ -337,7 +323,9 @@ collideRight::
 	ld a, [MAP_PTR_H]
 	ld d, a
 	ld a, [MAP_PTR_L]
+	ld b, b
 	ld e, a
+	inc de
 	inc de ;Get the top right tile of the player
 
 	; Do not collide if the tile is not solid
@@ -345,9 +333,11 @@ collideRight::
 	and TILE_IS_SOLID ; and clear the carry flag.
 	ret z
 
-	; Do not check collisions if the player moves to the right.
+	; Do not check collisions if the player moves to the left.
 	ld a, [PLAYER_STRUCT + BASIC_OBJECT_STRUCT_X_SPEED_OFF]
 	bit 7, a ; bit clear the carry flag
+	ret nz
+	or a ; or clear the carry flag
 	ret z
 	ld b, a
 
