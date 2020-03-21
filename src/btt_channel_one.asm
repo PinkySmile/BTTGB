@@ -1,4 +1,9 @@
 ;channel 1
+
+bttIntroOne::
+	db $00, $80, $00, $14, $87, QUAVER ; NO SOUND
+	db $00, $80, $00, $14, $87, $FF ; NO SOUND
+
 bttChannelOne::
 ;mesure 1
 	db $00, $80, $87, $14, $87, QUAVER + QUAVER / 2 ; DO#2
