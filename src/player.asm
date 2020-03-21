@@ -179,8 +179,8 @@ movePlayer::
 	bit 7, d
 	jr nz, .negX
 	and 7
-	sub d
-	ret z
+	cp 7
+	ret nz
 	jr .endNegX
 .negX:
 	and 7
@@ -282,7 +282,6 @@ movePlayer::
 ;    de -> Not preserved
 ;    hl -> Not preserved
 collideLeft::
-	ld b, b
 	ld a, [MAP_PTR_H]
 	ld d, a
 	ld a, [MAP_PTR_L]
