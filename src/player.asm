@@ -144,14 +144,20 @@ executePlayerActions::
 	ret
 
 
+
+collidedLeft::
+	ld hl, PLAYER_STRUCT + BASIC_OBJECT_STRUCT_X_SPEED_OFF
+	inc [hl]
+	ret
+
 movePlayer::
 	ld de, .moveY
 	push de
 
 .moveX:
 	; Check collisions.
-	;call collideLeft
-	;jr c, collidedLeft
+	call collideLeft
+	jr c, collidedLeft
 
 	; Initialize value for the move.
 	ld a, [PLAYER_STRUCT + BASIC_OBJECT_STRUCT_X_SPEED_OFF]
@@ -163,6 +169,18 @@ movePlayer::
 	ld a, [hl]
 	add d
 	ld [hl], a
+
+	bit 7, d
+	jr nz, .negX
+	and 7
+	sub d
+	ret nc
+	jr .endNegX
+.negX:
+	and 7
+	add d
+	ret nz
+.endNegX:
 
 	; Move the map ptr (position of the player on the map)
 	ld hl, MAP_PTR_L
@@ -184,7 +202,6 @@ movePlayer::
 	ld a, [PLAYER_STRUCT + BASIC_OBJECT_STRUCT_Y_SPEED_OFF]
 	or a
 	ret z
-	ld b, b
 	ld d, a
 	ld b, a
 	ld a, [MAP + MAP_SIZE_Y_OFF]
@@ -282,7 +299,6 @@ collideLeft::
 	bit 7, a ; bit clear the carry flag
 	ret z
 	ld b, a
-	ld b,b
 
 	; Calculate the offset of the player compared to the map tile
 	ld a, [SCROLL_X]
@@ -290,10 +306,4 @@ collideLeft::
 	sub b ; a now contains the position of the player (in pixels) after the movement. 0 represent the left border of the current tile.
 
 	cp 0 ; If position < 0, then the player collide with the tile (he tries to move to the left tiles, else he is still in the current tile.
-	ret
-
-
-collidedLeft::
-	ld hl, PLAYER_STRUCT + BASIC_OBJECT_STRUCT_X_SPEED_OFF
-	inc [hl]
 	ret
