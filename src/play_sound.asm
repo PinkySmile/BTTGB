@@ -65,21 +65,25 @@ playNoiseSound::
 ;    de -> Not preserved
 ;    hl -> Not preserved
 updateMusic::
-	push hl
-	push af
-	push de
-
+	ld b, a
+	xor a
 	or [hl]
 	ret z
 
 	dec [hl]
 	ret nz
 
+	ld a, b
+	push hl
+	push af
+	push de
+
 	; de = hl
 	ld d, h
 	ld e, l
 
 	; hl = *de
+	inc de
 	ld a, [de]
 	ld h, a
 	inc de
@@ -88,6 +92,8 @@ updateMusic::
 
 	pop de
 	pop af
+	ld b, 0
+	ld c, a
 	call copyMemory
 
 	ld a, [hl]
@@ -98,6 +104,7 @@ updateMusic::
 	ld d, h
 	ld e, l
 
+	inc de
 	pop hl
 	ld [hli], a
 	ld a, d
@@ -112,10 +119,12 @@ updateMusic::
 	; de = hl
 	ld d, h
 	ld e, l
+	inc de
 
 	ld a, QUAVER
 	ld [hli], a
 
+	inc hl
 	inc hl
 	ld bc, 2
 	jp copyMemory
@@ -136,12 +145,26 @@ playMusic::
 	ld [hli], a
 	ld a, d
 	ld [hli], a
-	ld a, l
+	ld a, e
 	ld [hli], a
 
 	ld a, d
 	ld [hli], a
-	ld a, l
+	ld a, e
+	ld [hli], a
+	ret
+
+playMusicIntro::
+	ld a, 1
+	ld [hli], a
+	ld a, d
+	ld [hli], a
+	ld a, e
+	ld [hli], a
+
+	ld a, b
+	ld [hli], a
+	ld a, c
 	ld [hli], a
 	ret
 
@@ -153,13 +176,16 @@ updateMusics::
 	call updateMusic
 
 	ld a, 4
+	ld hl, MUSIC_CHANNEL_2
 	ld de, CHANNEL2_LENGTH
 	call updateMusic
 
 	ld a, 5
+	ld hl, MUSIC_CHANNEL_WAVE
 	ld de, CHANNEL3_ON_OFF
 	call updateMusic
 
 	ld a, 4
+	ld hl, MUSIC_CHANNEL_NOISE
 	ld de, CHANNEL4_LENGTH
 	jp updateMusic
