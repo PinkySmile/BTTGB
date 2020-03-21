@@ -81,6 +81,7 @@ run::
 
 	call updateGravity
 	call updatePlayer
+	call checkCollisionsUnderPlayer
 	jr .gameLoop
 
 include "src/init.asm"
@@ -99,3 +100,4 @@ include "src/map.asm"
 include "src/camera.asm"
 include "src/displayable_object.asm"
 include "src/gravity.asm"
+;include "src/collisions.asm"
