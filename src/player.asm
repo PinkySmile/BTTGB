@@ -127,9 +127,8 @@ executePlayerActions::
 
 
 movePlayer::
-	call .moveX
-	call .moveY
-	ret
+	ld de, .moveY
+	push de
 
 .moveX:
 	ld a, [PLAYER_STRUCT + BASIC_OBJECT_STRUCT_X_SPEED_OFF]
