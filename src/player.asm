@@ -150,7 +150,7 @@ executePlayerActions::
 .up::
 	call initGravity
 	ld hl, PLAYER_STRUCT + BASIC_OBJECT_STRUCT_Y_SPEED_OFF
-	ld [hl], -5
+	ld [hl], -3
 	ret
 
 .down::
@@ -417,6 +417,8 @@ collideBelow::
 	ld a, [PLAYER_STRUCT + BASIC_OBJECT_STRUCT_Y_SPEED_OFF]
 	bit 7, a ; bit clear the carry flag
 	ret nz
+	or a
+	ret z
 	ld b, a
 
 	scf ; set the carry flag
