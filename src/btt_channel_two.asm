@@ -1,6 +1,6 @@
 ;channel 2
 bttIntroTwo::
-	db $80, $00, $42, $86, $07 ; NO SOUND
+	db $80, $00, $42, $86, $D ; NO SOUND
 	db $80, $87, $42, $86, INTROLN ; RE1
 	db $80, $87, $5C, $86, INTROLN ; RE#1
 	db $80, $87, $8A, $86, INTROLN ; FA1
