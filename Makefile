@@ -47,7 +47,14 @@ COMPRESSED_IMGS = \
 COMPRESSED_IMGS_FX = $(COMPRESSED_IMGS:%.png=%.zfx)
 
 
-COLORED_IMGS = assets/player/player_idle/player_idle1.png
+COLORED_IMGS = assets/player/player_idle/player_idle1.png \
+				assets/player/player_idle/player_idle2.png \
+				assets/player/player_idle/player_idle3.png \
+				assets/player/player_idle/player_idle4.png \
+				assets/player/player_walk/player_walk1.png \
+				assets/player/player_walk/player_walk2.png \
+				assets/player/player_walk/player_walk3.png \
+				assets/player/player_walk/player_walk4.png \
 
 COLORED_IMGS_FX = $(COLORED_IMGS:%.png=%.cfx)
 

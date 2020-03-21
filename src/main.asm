@@ -61,6 +61,10 @@ run::
 	ld de, bttIntroThree
 	ld hl, MUSIC_CHANNEL_WAVE
 	call playMusicIntro
+    ld bc, bttChannelFour
+	ld de, bttIntroFour
+	ld hl, MUSIC_CHANNEL_NOISE
+	call playMusicIntro
 
 	ei
 	reg INTERRUPT_ENABLED, VBLANK_INTERRUPT
@@ -93,13 +97,16 @@ run::
 
 	call initGravity
 	call initPlayers
+	call initAnimation
 .gameLoop:
 	reset INTERRUPT_REQUEST
 	halt
 
 	call updateGravity
 	call updatePlayer
+	call updateAnimation
 	call updateMusics
+	;call checkCollisionsUnderPlayer
 	jr .gameLoop
 
 include "src/init.asm"
@@ -121,3 +128,6 @@ include "src/gravity.asm"
 include "src/btt_channel_one.asm"
 include "src/btt_channel_two.asm"
 include "src/btt_channel_three.asm"
+include "src/btt_channel_four.asm"
+include "src/player_animation.asm"
+include "src/collisions.asm"
