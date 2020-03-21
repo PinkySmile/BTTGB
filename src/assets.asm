@@ -59,6 +59,11 @@ PlayerSprites::
 	incbin "assets/player/player_idle/player_idle3.cfx"
 	incbin "assets/player/player_idle/player_idle4.cfx"
 
+	incbin "assets/player/player_walk/player_walk1.cfx"
+    incbin "assets/player/player_walk/player_walk2.cfx"
+    incbin "assets/player/player_walk/player_walk3.cfx"
+    incbin "assets/player/player_walk/player_walk4.cfx"
+
 PlayerSpritesEnd::
 
 include "src/palettes.asm"
