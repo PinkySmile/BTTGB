@@ -203,6 +203,8 @@ movePlayer::
 	ret nz
 .endNegX:
 
+	call updateCameraH
+
 	; Move the map ptr (position of the player on the map)
 	ld hl, MAP_PTR_L
 	ld a, [hl]
@@ -213,11 +215,11 @@ movePlayer::
 	bit 7, d
 	jr nz, .underflow
 	inc [hl]
-	jp updateCameraH
+	ret
 
 .underflow:
 	dec [hl]
-	jp updateCameraH
+	ret
 
 .moveY:
 	ld a, [PLAYER_STRUCT + BASIC_OBJECT_STRUCT_Y_SPEED_OFF]

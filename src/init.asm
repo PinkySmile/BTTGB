@@ -68,6 +68,11 @@ init::
 	call DMA
 	call initWPRAM
 
+	reset INTERRUPT_ENABLED
+	reg JOYPAD_REGISTER, $30
+	reg KEY1, $1
+	stop
+
 	ret
 
 updateRegisters::
