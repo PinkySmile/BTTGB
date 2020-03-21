@@ -12,7 +12,7 @@ updateCameraH::
 	ret
 
 updateCameraV::
-	ld b, b
+	;ld b, b
 	call getCamPos
 
 	ld a, l

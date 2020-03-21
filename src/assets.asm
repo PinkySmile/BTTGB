@@ -55,6 +55,10 @@ GameSpritesEnd::
 
 PlayerSprites::
 	incbin "assets/player/player_idle/player_idle1.cfx"
+	incbin "assets/player/player_idle/player_idle2.cfx"
+	incbin "assets/player/player_idle/player_idle3.cfx"
+	incbin "assets/player/player_idle/player_idle4.cfx"
+
 PlayerSpritesEnd::
 
 include "src/palettes.asm"

@@ -93,13 +93,16 @@ run::
 
 	call initGravity
 	call initPlayers
+	call initAnimation
 .gameLoop:
 	reset INTERRUPT_REQUEST
 	halt
 
-	;call updateGravity
+	call updateGravity
 	call updatePlayer
+	call updateAnimation
 	call updateMusics
+	;call checkCollisionsUnderPlayer
 	jr .gameLoop
 
 include "src/init.asm"
@@ -121,3 +124,5 @@ include "src/gravity.asm"
 include "src/btt_channel_one.asm"
 include "src/btt_channel_two.asm"
 include "src/btt_channel_three.asm"
+include "src/player_animation.asm"
+include "src/collisions.asm"
