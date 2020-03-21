@@ -80,12 +80,14 @@ run::
 
 	call initGravity
 	call initPlayers
+	call initAnimation
 .gameLoop:
 	reset INTERRUPT_REQUEST
 	halt
 
 	call updateGravity
 	call updatePlayer
+	call updateAnimation
 	jr .gameLoop
 
 include "src/init.asm"
@@ -104,3 +106,4 @@ include "src/map.asm"
 include "src/camera.asm"
 include "src/displayable_object.asm"
 include "src/gravity.asm"
+include "src/player_animation.asm"
