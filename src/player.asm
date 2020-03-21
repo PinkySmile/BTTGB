@@ -116,6 +116,10 @@ executePlayerActions::
 	ret
 
 .right::
+	ld hl, PLAYER_STRUCT + DISPLAYABLE_OBJECT_STRUCT_ORIENTATION
+	ld a, %0001
+	ld [hl], a
+
 	ld hl, PLAYER_STRUCT + BASIC_OBJECT_STRUCT_X_SPEED_OFF
 
 	xor a
@@ -130,6 +134,10 @@ executePlayerActions::
 	ret
 
 .left::
+	ld hl, PLAYER_STRUCT + DISPLAYABLE_OBJECT_STRUCT_ORIENTATION
+    ld a, %0000
+    ld [hl], a
+
 	ld hl, PLAYER_STRUCT + BASIC_OBJECT_STRUCT_X_SPEED_OFF
 
 	bit 7, [hl]
