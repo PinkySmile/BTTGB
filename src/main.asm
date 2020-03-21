@@ -61,7 +61,7 @@ run::
 	ld de, bttIntroThree
 	ld hl, MUSIC_CHANNEL_WAVE
 	call playMusicIntro
-    ld bc, bttChannelFour
+	ld bc, bttChannelFour
 	ld de, bttIntroFour
 	ld hl, MUSIC_CHANNEL_NOISE
 	call playMusicIntro
