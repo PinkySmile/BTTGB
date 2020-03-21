@@ -84,10 +84,6 @@ executePlayerActions::
 	call z, .start
 	ret
 
-.a::
-	call jump
-	ret
-
 .b::
 	ret
 
@@ -120,9 +116,9 @@ executePlayerActions::
 	dec [hl]
 	ret
 
+.a::
 .up::
-	call jump
-	ret
+	jp jump
 
 .down::
 	ret

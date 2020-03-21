@@ -31,7 +31,24 @@ copyMapColumn::
 	push af
 .loop::
 	ld a, [hl]
+
+	push bc
+	ld c, a
+	reg VRAM_BANK_SELECT, 1
+	ld a, c
+	and TILE_PALETTE
+	rra
+	rra
+	rra
+	rra
+	rra
 	ld [de], a
+	reset VRAM_BANK_SELECT
+
+	ld a, c
+	and TILE_TEXTURE
+	ld [de], a
+	pop bc
 
 	ld a, e
 	add c
@@ -89,12 +106,12 @@ loadMap::
 
 	push bc
 	ld b, a
-	and %00011111
+	and TILE_TEXTURE
 	ld [de], a
 
 	reg VRAM_BANK_SELECT, 1
 	ld a, b
-	and %11100000
+	and TILE_PALETTE
 	rra
 	rra
 	rra
