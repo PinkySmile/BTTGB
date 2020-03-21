@@ -22,7 +22,7 @@ playerAnimationIdle::
 	inc [hl]
 	inc [hl]
 	inc [hl]
-	ld a, PLAYER_SPRITE_NBR + 8
+	ld a, 0
 	cp [hl]
 	jr z, .resetAnim
 	ret
