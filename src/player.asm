@@ -134,6 +134,8 @@ movePlayer::
 
 .moveX:
 	ld a, [PLAYER_STRUCT + BASIC_OBJECT_STRUCT_X_SPEED_OFF]
+	or a
+	ret z
 	ld d, a
 
 	ld hl, SCROLL_X
@@ -158,7 +160,10 @@ movePlayer::
 
 .moveY:
 	ld a, [PLAYER_STRUCT + BASIC_OBJECT_STRUCT_Y_SPEED_OFF]
+	or a
+	ret z
 	ld d, a
+	ld b, a
 	ld a, [MAP + MAP_SIZE_Y_OFF]
 	ld e, a
 
@@ -167,27 +172,37 @@ movePlayer::
 	add d
 	ld [hl], a
 
-	; Move the map ptr (position of the player on the map)
-.loop:
-	call .moveMapPtrY
-	dec e
-	jp nz, .loop
-	ret
+	; Minus operator - if the number is neg, replace $FB (-5) by 5 etc
+	bit 7, d
+	jr nz, .loopNeg
 
-.moveMapPtrY:
+	; Move the map ptr (position of the player on the map)
+.loopPos:
 	ld hl, MAP_PTR_L
 	ld a, [hl]
-	add d
+	add e
 	ld [hld], a
 
-	ret nz
-	bit 7, d
-	jp nz, .yUnderflow
+	jr nc, .endLoopPos
 	inc [hl]
+.endLoopPos:
+	dec d
+	jr nz, .loopPos
 	ret
-.yUnderflow:
+
+.loopNeg:
+	ld hl, MAP_PTR_L
+	ld a, [hl]
+	sub e
+	ld [hld], a
+
+	jr nc, .endLoopNeg
 	dec [hl]
+.endLoopNeg:
+	inc d
+	jr nz, .loopNeg
 	ret
+
 
 jump::
 	ld hl, PLAYER_STRUCT + BASIC_OBJECT_STRUCT_Y_SPEED_OFF
