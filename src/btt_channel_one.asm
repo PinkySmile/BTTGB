@@ -1,7 +1,7 @@
 ;channel 1
 
 bttIntroOne::
-	db $00, $80, $00, $14, $87, QUAVER ; NO SOUND
+	db $00, $80, $00, $14, $87, QUAVER * 2 ; NO SOUND
 	db $00, $80, $00, $14, $87, $FF ; NO SOUND
 
 bttChannelOne::
