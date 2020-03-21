@@ -99,7 +99,7 @@ playerAnimationWalk::
 	inc [hl]
 	ld a, PLAYER_SPRITE_WALK_NBR + 12
 	cp [hl]
-	jr z, .resetWalkAnim
+	jr c, .resetWalkAnim
 	ret
 
 .resetWalkAnim
