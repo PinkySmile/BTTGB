@@ -117,7 +117,7 @@ displayObjectReversed:
 	ld b, 0
 .loopY:
 	inc hl
-	ld a, [hl-]
+	ld a, [hld]
 	ld c, a
 .loopX:
 	inc hl

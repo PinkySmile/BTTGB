@@ -57,9 +57,14 @@ run::
 	ld [WX], a
 	reg WY, $90
 
-	ld de, VRAM_START + PLAYER_SPRITE_NBR * $10
+	ld de, VRAM_START
 	ld hl, GameSprites
 	ld bc, GameSpritesEnd - GameSprites
+	call copyMemory
+
+	ld de, VRAM_START + PLAYER_SPRITE_NBR * $10
+	ld hl, PlayerSprites
+	ld bc, PlayerSpritesEnd - PlayerSprites
 	call copyMemory
 
 	ld hl, TestMap
@@ -73,11 +78,13 @@ run::
 	call setGBCPalette
 	reg LCD_CONTROL, LCD_BASE_CONTROL
 
+	call initGravity
 	call initPlayers
 .gameLoop:
 	reset INTERRUPT_REQUEST
 	halt
 
+	call updateGravity
 	call updatePlayer
 	jr .gameLoop
 
@@ -94,4 +101,6 @@ include "src/basic_object.asm"
 include "src/text.asm"
 include "src/credits.asm"
 include "src/map.asm"
+include "src/camera.asm"
 include "src/displayable_object.asm"
+include "src/gravity.asm"

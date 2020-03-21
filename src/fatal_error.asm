@@ -18,6 +18,7 @@ pcAt38::
 dispError::
 	; Display given text
 	call displayText
+	reg LCD_CONTROL, LCD_BASE_CONTROL
 	; Play a sound and lock CPU
 	jp fatalError
 

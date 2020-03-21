@@ -12,10 +12,11 @@ with open("assets/test_map.map", "wb") as fd:
 
 	# All default palettes ($7FFF, $5294, $294A, $0000)
 	l = []
-	for i in range(7):
+	for i in range(7 * 4):
 		r = random.randint(0x0000, 0x7FFF)
 		l += [r & 0xFF, r >> 8]
 
+	print(len(bytes([0xFF, 0x7F, 0x94, 0x52, 0x4A, 0x29, 0, 0] + l)))
 	fd.write(bytes([0xFF, 0x7F, 0x94, 0x52, 0x4A, 0x29, 0, 0] + l))
 
 	# Generate garbage map

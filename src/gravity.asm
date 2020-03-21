@@ -9,9 +9,11 @@
 ;    de -> Not preserved
 ;    hl -> Not preserved
 initGravity::
-    ld hl, GRAVITY_TIMER
-    ld [hl], GRAVITY_CONSTANT
-    ret
+	ld hl, GRAVITY_TIMER
+	ld [hl], GRAVITY_CONSTANT
+	ld hl, GRAVITY_LIMITER
+	ld [hl], 0
+	ret
 
 ; Update the gravity.
 ; Params:
@@ -24,25 +26,42 @@ initGravity::
 ;    de -> Not preserved
 ;    hl -> Not preserved
 updateGravity::
-    xor a
-    ld hl, GRAVITY_TIMER
-    cp [hl], a
-    jr nz, .isFalling
-    ld [hl], GRAVITY_CONSTANT
-    ld hl, PLAYER_STRUCT
-    add hl, 6
-    dec [hl]
-    cp [hl], -7
-    jr nc, .cap
-    ret
+	ld a, 0
+	ld hl, GRAVITY_TIMER
+	cp a, [hl]
+	jr nz, .isFalling
 
-    .isFalling:
-        dec [hl]
-    ret
+	ld [hl], GRAVITY_CONSTANT
+	ld a, [hl]
+	ld hl, GRAVITY_LIMITER
+	sub [hl]
+	ld [hl], a
 
-    .cap:
-        ld [hl], -7
-    ret
+	ld hl, PLAYER_STRUCT + BASIC_OBJECT_STRUCT_Y_SPEED_OFF
+	ld a, 7 ; Max speed
+	cp [hl]
+	jr z, .overflow
+	inc [hl]
+	ld a, 0
+	cp [hl]
+	jr nz, .skipZero
+	inc [hl]
+.skipZero
+	ld hl, GRAVITY_LIMITER
+	inc [hl]
+	ret
+
+
+.isFalling:
+	dec [hl]
+	ret
+
+.capGravity:
+	ld [hl], 1
+	ret
+
+.overflow:
+	ret
 
 
 
