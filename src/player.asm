@@ -160,7 +160,7 @@ movePlayer::
 
 .moveX:
 	; Check collisions.
-	;call collideLeft
+	call collideLeft
 	jr c, collidedLeft
 
 	; Initialize value for the move.
@@ -286,8 +286,7 @@ collideLeft::
 	ld a, [MAP_PTR_H]
 	ld d, a
 	ld a, [MAP_PTR_L]
-	ld e, a
-	dec de ; Get the tile at the left of the player
+	ld e, a ;Get the top left tile of the player
 
 	; Do not collide if the tile is not solid
 	ld a, [de]
@@ -300,10 +299,12 @@ collideLeft::
 	ret z
 	ld b, a
 
-	; Calculate the offset of the player compared to the map tile
-	ld a, [SCROLL_X]
-	and 8
-	sub b ; a now contains the position of the player (in pixels) after the movement. 0 represent the left border of the current tile.
-
-	cp 0 ; If position < 0, then the player collide with the tile (he tries to move to the left tiles, else he is still in the current tile.
+	scf ; set the carry flag
 	ret
+;	; Calculate the offset of the player compared to the map tile
+;	ld a, [SCROLL_X]
+;	and 7
+;	sub b ; a now contains the position of the player (in pixels) after the movement. 0 represent the left border of the current tile.
+;
+;	cp 0 ; If position < 0, then the player collide with the tile (he tries to move to the left tiles, else he is still in the current tile.
+;	ret
