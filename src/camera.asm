@@ -44,8 +44,15 @@ updateCameraV::
 
 .loop:
 	ld a, [de]
+	ld b, a
 	inc de
-	ld [hli], a
+	and TILE_TEXTURE
+	ld [hl], a
+	reg VRAM_BANK_SELECT, 1
+	ld a, b
+	and TILE_PALETTE
+	ld [hl], a
+	reset VRAM_BANK_SELECT
 	dec b
 	jr nz, .loop
 	ret

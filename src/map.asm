@@ -91,6 +91,88 @@ loadMap::
 	ld de, MAP
 	call copyMap
 
+	ld hl, BOTTOM_LEFT_VRAM_START_L
+
+	ld a, MAP_VRAM_START_BOTTOM_LEFT & $FF
+	ld [hli], a ; BOTTOM_LEFT_VRAM_START_L
+
+	ld a, MAP_VRAM_START_BOTTOM_LEFT >> 8
+	ld [hli], a ; BOTTOM_LEFT_VRAM_START_H
+
+	ld a, [MAP + MAP_SIZE_X_OFF]
+	ld b, 0
+	ld c, a
+
+	rl c
+	rl b
+	rl c
+	rl b
+
+	ld d, b
+	ld e, c
+
+	rl e
+	rl d
+	rl e
+	rl d
+
+	ld a, c
+	add e
+	ld c, a
+
+	ld a, b
+	adc d
+	ld b, a
+
+	ld a, c
+	add (MAP + MAP_SIZE_TILES_OFF) & $FF
+	ld [hli], a ; BOTTOM_LEFT_MAP_START_L
+
+	ld a, b
+	adc (MAP + MAP_SIZE_TILES_OFF) >> 8
+	ld [hli], a ; BOTTOM_LEFT_MAP_START_H
+
+
+	ld a, MAP_VRAM_START_TOP_RIGHT & $FF
+	ld [hli], a ; TOP_RIGHT_VRAM_START_L
+	ld a, MAP_VRAM_START_TOP_RIGHT >> 8
+	ld [hli], a ; TOP_RIGHT_VRAM_START_H
+
+	ld a, [MAP + MAP_SIZE_X_OFF]
+	add (MAP + MAP_SIZE_TILES_OFF) & $FF
+	ld [hli], a ; TOP_RIGHT_MAP_START_L
+
+	ld a, 0
+	adc (MAP + MAP_SIZE_TILES_OFF) >> 8
+	ld [hli], a ; TOP_RIGHT_MAP_START_H
+
+
+	ld a, MAP_VRAM_START_LEFT_LEFT & $FF
+	ld [hli], a ; LEFT_LEFT_VRAM_START_L
+	ld a, MAP_VRAM_START_LEFT_LEFT >> 8
+	ld [hli], a ; LEFT_LEFT_VRAM_START_H
+	ld a, MAP_MAP_START_LEFT_LEFT & $FF
+	ld [hli], a ; LEFT_LEFT_MAP_START_L
+	ld a, MAP_MAP_START_LEFT_LEFT >> 8
+	ld [hli], a ; LEFT_LEFT_MAP_START_H
+
+
+	ld a, MAP_VRAM_START_TOP_LEFT & $FF
+	ld [hli], a ; TOP_LEFT_VRAM_START_L
+	ld a, MAP_VRAM_START_TOP_LEFT >> 8
+	ld [hli], a ; TOP_LEFT_VRAM_START_H
+
+	ld a, [MAP + MAP_SIZE_X_OFF]
+	ld b, a
+	ld a, (MAP + MAP_SIZE_TILES_OFF) & $FF
+	sub b
+	ld [hli], a ; TOP_LEFT_MAP_START_L
+
+	ld a, (MAP + MAP_SIZE_TILES_OFF) >> 8
+	sbc 0
+	ld [hli], a ; TOP_LEFT_MAP_START_H
+
+
 	ld hl, MAP + MAP_SIZE_PAL_OFF
 	ld bc, $40
 	ld a, 0
