@@ -57,9 +57,14 @@ run::
 	ld [WX], a
 	reg WY, $90
 
-	ld de, VRAM_START + PLAYER_SPRITE_NBR * $10
+	ld de, VRAM_START
 	ld hl, GameSprites
 	ld bc, GameSpritesEnd - GameSprites
+	call copyMemory
+
+	ld de, VRAM_START + PLAYER_SPRITE_NBR * $10
+	ld hl, PlayerSprites
+	ld bc, PlayerSpritesEnd - PlayerSprites
 	call copyMemory
 
 	ld hl, TestMap

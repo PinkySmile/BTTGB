@@ -100,7 +100,6 @@ loadMap::
 	reg SCROLL_X, $8
 	reg SCROLL_Y, $8
 
-	ld b, b
 	ld a, [MAP + MAP_SIZE_X_OFF]
 	inc a
 

@@ -25,7 +25,7 @@ initPlayers::
 	xor a
 	ld [hli], a ; BASIC_OBJECT_STRUCT_Y_SPEED_OFF
 
-	ld a, 2
+	ld a, PLAYER_SPRITE_NBR
 	ld [hli], a ; DISPLAYABLE_OBJECT_STRUCT_SPRITE
 	ld a, %0001
 	ld [hli], a ; DISPLAYABLE_OBJECT_STRUCT_ORIENTATION
