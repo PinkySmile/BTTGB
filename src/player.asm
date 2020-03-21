@@ -31,7 +31,6 @@ initPlayers::
 	ld [hli], a ; DISPLAYABLE_OBJECT_STRUCT_ORIENTATION
 
 	; Init the MAP_PTR.
-	ld b, b
 	ld hl, MAP_PTR_H
 	ld [hl], MAP >> 8
 
