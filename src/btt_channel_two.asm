@@ -28,13 +28,13 @@ bttChannelTwo::
     db $80, $87, $D6, $86, QUAVER + QUAVER / 2 ; LA1
 ;mesure 4
     db $80, $00, $14, $87, QUAVER / 2 ; NO SOUND
-    db $80, $87, $5C, $87, QUAVER + QUAVER / 2 ; RE#2
+    db $80, $87, $2E, $87, QUAVER + QUAVER / 2 ; RE#2
     db $80, $87, $14, $87, QUAVER + QUAVER / 2 ; DO#2
     db $80, $87, $14, $87, QUAVER + QUAVER / 2 ; DO#2
     db $80, $87, $14, $87, QUAVER + QUAVER / 2 ; DO#2
     db $80, $87, $14, $87, QUAVER ; DO#2
     db $80, $87, $14, $87, QUAVER ; DO#2
-    db $80, $87, $5C, $87, QUAVER ; RE#2
+    db $80, $87, $2E, $87, QUAVER ; RE#2
 ;mesure 5
     db $80, $00, $D6, $86, QUAVER ; NO SOUND
     db $80, $87, $14, $87, QUAVER + QUAVER / 2  ; DO#2
@@ -44,11 +44,11 @@ bttChannelTwo::
     db $80, $87, $14, $87, QUAVER ; DO#2
 ;mesure 6
     db $80, $00, $D6, $86, QUAVER ; NO SOUND
-    db $80, $87, $5C, $87, QUAVER + QUAVER / 2 ; RE#2
-    db $80, $87, $5C, $87, QUAVER + QUAVER / 2 ; RE#2
-    db $80, $87, $5C, $87, QUAVER + QUAVER / 2 ; RE#2
-    db $80, $87, $5C, $87, QUAVER + QUAVER / 2 ; RE#2
-    db $80, $87, $5C, $87, QUAVER ; RE#2
+    db $80, $87, $2E, $87, QUAVER + QUAVER / 2 ; RE#2
+    db $80, $87, $2E, $87, QUAVER + QUAVER / 2 ; RE#2
+    db $80, $87, $2E, $87, QUAVER + QUAVER / 2 ; RE#2
+    db $80, $87, $2E, $87, QUAVER + QUAVER / 2 ; RE#2
+    db $80, $87, $2E, $87, QUAVER ; RE#2
 ;mesure 7
     db $80, $00, $D6, $86, QUAVER ; NO SOUND
     db $80, $87, $39, $87, QUAVER + QUAVER / 2 ; MI2
@@ -70,7 +70,7 @@ bttChannelTwo::
     db $80, $87, $14, $87, QUAVER + QUAVER / 2  ; DO#2
     db $80, $87, $14, $87, QUAVER ; DO#2
     db $80, $87, $14, $87, QUAVER ; DO#2
-    db $80, $87, $5C, $87, QUAVER ; RE#2
+    db $80, $87, $2E, $87, QUAVER ; RE#2
 ;mesure 10
     db $80, $00, $D6, $86, QUAVER / 2 ; NO SOUND
     db $80, $87, $14, $87, QUAVER + QUAVER / 2  ; DO#2
@@ -78,7 +78,7 @@ bttChannelTwo::
     db $80, $87, $14, $87, QUAVER + QUAVER / 2  ; DO#2
     db $80, $87, $14, $87, QUAVER  ; DO#2
     db $80, $87, $4F, $87, QUAVER  ; FA#2
-    db $80, $87, $5C, $87, QUAVER ; RE#2
+    db $80, $87, $2E, $87, QUAVER ; RE#2
 ;mesure 11
     db $80, $00, $D6, $86, QUAVER / 2 ; NO SOUND
     db $80, $87, $F7, $86, QUAVER + QUAVER / 2  ; SI1
