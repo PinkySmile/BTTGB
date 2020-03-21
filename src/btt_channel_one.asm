@@ -1,4 +1,9 @@
 ;channel 1
+
+bttIntroOne::
+	db $00, $80, $00, $14, $87, QUAVER * 2 ; NO SOUND
+	db $00, $80, $00, $14, $87, $FF ; NO SOUND
+
 bttChannelOne::
 ;mesure 1
 	db $00, $80, $87, $14, $87, QUAVER + QUAVER / 2 ; DO#2
@@ -20,9 +25,9 @@ bttChannelOne::
 	db $00, $80, $87, $14, $87, QUAVER + QUAVER / 2 ; DO#2
 	db $00, $80, $87, $14, $87, QUAVER + QUAVER / 2 ; DO#2
 ;mesure 4
-	db $00, $80, $07, $4F, $87, QUAVER * 7 + QUAVER / 2 ; FA#2
-	db $00, $80, $87, $14, $87, QUAVER ; DO#2
-	db $00, $80, $B7, $D6, $86, QUAVER ; LA1
+    db $00, $80, $0F, $4F, $87, QUAVER * 7 + QUAVER / 2 ; FA#2
+    db $00, $80, $87, $14, $87, QUAVER ; DO#2
+    db $00, $80, $B7, $D6, $86, QUAVER ; LA1
 ;mesure 5
 	db $00, $80, $87, $14, $87, QUAVER ; DO#2
 	db $00, $80, $B7, $4F, $87, QUAVER ; FA#2

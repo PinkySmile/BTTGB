@@ -49,6 +49,19 @@ mainMenu::
 
 ; Runs the main program
 run::
+	ld bc, bttChannelOne
+	ld de, bttIntroOne
+	ld hl, MUSIC_CHANNEL_1
+	call playMusicIntro
+	ld bc, bttChannelTwo
+	ld de, bttIntroTwo
+	ld hl, MUSIC_CHANNEL_2
+	call playMusicIntro
+	ld bc, bttChannelThree
+	ld de, bttIntroThree
+	ld hl, MUSIC_CHANNEL_WAVE
+	call playMusicIntro
+
 	ei
 	reg INTERRUPT_ENABLED, VBLANK_INTERRUPT
 	call waitVBLANK
@@ -86,6 +99,7 @@ run::
 
 	;call updateGravity
 	call updatePlayer
+	call updateMusics
 	jr .gameLoop
 
 include "src/init.asm"
@@ -104,3 +118,6 @@ include "src/map.asm"
 include "src/camera.asm"
 include "src/displayable_object.asm"
 include "src/gravity.asm"
+include "src/btt_channel_one.asm"
+include "src/btt_channel_two.asm"
+include "src/btt_channel_three.asm"
