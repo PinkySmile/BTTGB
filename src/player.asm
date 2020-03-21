@@ -98,7 +98,7 @@ executePlayerActions::
 
 	xor a
 	or [hl]
-	jp z, .moveRight
+	jr z, .moveRight
 
 	bit 7, [hl]
 	ret z
@@ -152,14 +152,17 @@ movePlayer::
 
 	ret nz
 	bit 7, d
-	jp nz, .underflow
+	jr nz, .underflow
+
 	inc [hl]
-	ret
+	jp updateCameraH
+
 .underflow:
 	dec [hl]
-	ret
+	jp updateCameraH
 
 .moveY:
+	ld b, b
 	ld a, [PLAYER_STRUCT + BASIC_OBJECT_STRUCT_Y_SPEED_OFF]
 	or a
 	ret z
@@ -170,12 +173,27 @@ movePlayer::
 
 	ld hl, SCROLL_Y
 	ld a, [hl]
+	push af
 	add d
 	ld [hl], a
+	push af
 
 	; Minus operator - if the number is neg, replace $FB (-5) by 5 etc
+	push de
 	bit 7, d
-	jr nz, .loopNeg
+	jr nz, .neg
+
+	pop bc
+	pop af
+
+	and 8
+	ld c, a
+	ld a, b
+	and 8
+	cp c
+	pop de
+	ret nc
+	push de
 
 	; Move the map ptr (position of the player on the map)
 .loopPos:
@@ -189,7 +207,20 @@ movePlayer::
 .endLoopPos:
 	dec d
 	jr nz, .loopPos
-	ret
+	jr .updateCamera
+
+.neg::
+	pop af
+	pop bc
+
+	and 8
+	ld c, a
+	ld a, b
+	and 8
+	cp c
+	pop de
+	ret nc
+	push de
 
 .loopNeg:
 	ld hl, MAP_PTR_L
@@ -202,7 +233,11 @@ movePlayer::
 .endLoopNeg:
 	inc d
 	jr nz, .loopNeg
-	ret
+
+.updateCamera:
+	pop de
+
+	jp updateCameraV
 
 
 jump::
