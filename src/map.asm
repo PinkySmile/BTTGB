@@ -86,8 +86,24 @@ loadMap::
 	ld c, 20
 .copyLoop:
 	ld a, [hli]
+
+	push bc
+	ld b, a
 	and %00011111
 	ld [de], a
+
+	reg VRAM_BANK_SELECT, 1
+	ld a, b
+	and %11100000
+	rra
+	rra
+	rra
+	rra
+	rra
+	ld [de], a
+	reset VRAM_BANK_SELECT
+	pop bc
+
 	inc de
 	dec c
 	jr nz, .copyLoop
