@@ -306,9 +306,19 @@ collideLeft::
 	; Do not collide if the tile is not solid
 	ld a, [de]
 	and TILE_IS_SOLID ; and clear the carry flag.
+	jr nz, .ok
+
+	; Check for the lower half of the body.
+	ld a, [MAP + MAP_SIZE_X_OFF]
+	ld h, 0
+	ld l, a
+	add hl, de
+	ld a, [hl]
+	and TILE_IS_SOLID ; and clear the carry flag.
 	ret z
 
 	; Do not check collisions if the player moves to the right.
+.ok:
 	ld a, [PLAYER_STRUCT + BASIC_OBJECT_STRUCT_X_SPEED_OFF]
 	bit 7, a ; bit clear the carry flag
 	ret z
@@ -338,9 +348,19 @@ collideRight::
 	; Do not collide if the tile is not solid
 	ld a, [de]
 	and TILE_IS_SOLID ; and clear the carry flag.
+	jr nz, .ok
+
+	; Check for the lower half of the body.
+	ld a, [MAP + MAP_SIZE_X_OFF]
+	ld h, 0
+	ld l, a
+	add hl, de
+	ld a, [hl]
+	and TILE_IS_SOLID ; and clear the carry flag.
 	ret z
 
 	; Do not check collisions if the player moves to the left.
+.ok:
 	ld a, [PLAYER_STRUCT + BASIC_OBJECT_STRUCT_X_SPEED_OFF]
 	bit 7, a ; bit clear the carry flag
 	ret nz
