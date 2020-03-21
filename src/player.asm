@@ -30,30 +30,52 @@ initPlayers::
 	ld a, %0001
 	ld [hli], a ; DISPLAYABLE_OBJECT_STRUCT_ORIENTATION
 
+	ld b, b
 	; Init the MAP_PTR.
-	ld hl, MAP_PTR_H
-	ld [hl], MAP >> 8
-
-	ld a, [MAP + MAP_SIZE_Y_OFF]
+	ld a, [MAP + MAP_SIZE_X_OFF]
 	ld c, a
-	ld b, PLAYER_POSITION_Y / 8 + 1
-	ld a, MAP & $FF + MAP_SIZE_TILES_OFF
+	ld b, 0
+	rl c
+	rl b
+	rl c
+	rl b
+	rl c
+	rl b
 
-	add PLAYER_POSITION_X / 8
-	sub 4 ; TODO Find why we need a -4 here and adapt it for every map.
-	jr c, .overflow
-.loop:
-	add c
-	jr c, .overflow
-.endLoop:
-	dec b
-	jr nz, .loop
+	ld h, MAP >> 8
+	ld l, MAP & $FF + MAP_SIZE_TILES_OFF
+	add hl, bc
+	ld b, 0
+	ld c, PLAYER_POSITION_X / 8
+	add hl, bc
+	push hl
+	pop bc
+
+	ld hl, MAP_PTR_H
+	ld [hl], b
 	inc hl
-	ld [hl], a
+	ld [hl], c
 	ret
-.overflow:
-	inc [hl]
-	jr .endLoop
+;	ld a, [MAP + MAP_SIZE_Y_OFF]
+;	ld c, a
+;	ld b, PLAYER_POSITION_Y / 8 + 1
+;	ld a, MAP & $FF + MAP_SIZE_TILES_OFF
+
+;	add PLAYER_POSITION_X / 8
+;	sub 4 ; TODO Find why we need a -4 here and adapt it for every map.
+;	jr c, .overflow
+;.loop:
+;	add c
+;	jr c, .overflow
+;.endLoop:
+;	dec b
+;	jr nz, .loop
+;	inc hl
+;	ld [hl], a
+;	ret
+;.overflow:
+;	inc [hl]
+;	jr .endLoop
 
 ; Update the player.
 ; Params:
@@ -308,10 +330,34 @@ collideLeft::
 
 	scf ; set the carry flag
 	ret
-;	; Calculate the offset of the player compared to the map tile
-;	ld a, [SCROLL_X]
-;	and 7
-;	sub b ; a now contains the position of the player (in pixels) after the movement. 0 represent the left border of the current tile.
-;
-;	cp 0 ; If position < 0, then the player collide with the tile (he tries to move to the left tiles, else he is still in the current tile.
-;	ret
+
+; Check right collisions for the player.
+; Params:
+;    None
+; Return:
+;    c -> set if the player collide.
+; Registers:
+;    af -> Not preserved
+;    bc -> Not preserved
+;    de -> Not preserved
+;    hl -> Not preserved
+collideRight::
+	ld a, [MAP_PTR_H]
+	ld d, a
+	ld a, [MAP_PTR_L]
+	ld e, a
+	inc de ;Get the top right tile of the player
+
+	; Do not collide if the tile is not solid
+	ld a, [de]
+	and TILE_IS_SOLID ; and clear the carry flag.
+	ret z
+
+	; Do not check collisions if the player moves to the right.
+	ld a, [PLAYER_STRUCT + BASIC_OBJECT_STRUCT_X_SPEED_OFF]
+	bit 7, a ; bit clear the carry flag
+	ret z
+	ld b, a
+
+	scf ; set the carry flag
+	ret
