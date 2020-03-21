@@ -40,6 +40,7 @@ initPlayers::
 	ld a, MAP & $FF + MAP_SIZE_TILES_OFF
 
 	add PLAYER_POSITION_X / 8
+	sub 4 ; TODO Find why we need a -4 here and adapt it for every map.
 	jr c, .overflow
 .loop:
 	add c
@@ -138,7 +139,10 @@ executePlayerActions::
 
 .a::
 .up::
-	jp jump
+	call initGravity
+	ld hl, PLAYER_STRUCT + BASIC_OBJECT_STRUCT_Y_SPEED_OFF
+	ld [hl], -5
+	ret
 
 .down::
 	ret
@@ -156,7 +160,7 @@ movePlayer::
 
 .moveX:
 	; Check collisions.
-	call collideLeft
+	;call collideLeft
 	jr c, collidedLeft
 
 	; Initialize value for the move.
@@ -167,18 +171,19 @@ movePlayer::
 
 	ld hl, SCROLL_X
 	ld a, [hl]
+	push af
 	add d
 	ld [hl], a
 
+	pop af
 	bit 7, d
 	jr nz, .negX
 	and 7
 	sub d
-	ret nc
+	ret z
 	jr .endNegX
 .negX:
 	and 7
-	add d
 	ret nz
 .endNegX:
 
@@ -266,13 +271,6 @@ movePlayer::
 	jp updateCameraV
 
 
-jump::
-	call initGravity
-	ld hl, PLAYER_STRUCT + BASIC_OBJECT_STRUCT_Y_SPEED_OFF
-	ld [hl], -5
-	ret
-
-
 ; Check left collisions for the player.
 ; Params:
 ;    None
@@ -284,6 +282,7 @@ jump::
 ;    de -> Not preserved
 ;    hl -> Not preserved
 collideLeft::
+	ld b, b
 	ld a, [MAP_PTR_H]
 	ld d, a
 	ld a, [MAP_PTR_L]
