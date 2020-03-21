@@ -64,6 +64,8 @@ PlayerSprites::
     incbin "assets/player/player_walk/player_walk3.cfx"
     incbin "assets/player/player_walk/player_walk4.cfx"
 
+    incbin "assets/player/player_jump/player_jump.cfx"
+
 PlayerSpritesEnd::
 
 include "src/palettes.asm"

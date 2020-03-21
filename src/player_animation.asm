@@ -32,16 +32,27 @@ updateAnimation::
 	ret
 
 .animate
-	ld hl, PLAYER_STRUCT + BASIC_OBJECT_STRUCT_X_SPEED_OFF
 	ld a, 0
+
+	ld hl, PLAYER_STRUCT + BASIC_OBJECT_STRUCT_Y_SPEED_OFF
 	cp [hl]
-	jr z, .idle
+	jr nz, .jump
+
+	ld hl, PLAYER_STRUCT + BASIC_OBJECT_STRUCT_X_SPEED_OFF
+	cp [hl]
+	jr nz, .walk
+
+	call playerAnimationIdle
+	call initAnimation
+	ret
+
+.walk
 	call playerAnimationWalk
 	call initAnimation
 	ret
 
-.idle
-	call playerAnimationIdle
+.jump
+	call playerAnimationJump
 	call initAnimation
 	ret
 
@@ -93,4 +104,19 @@ playerAnimationWalk::
 
 .resetWalkAnim
 	ld [hl], PLAYER_SPRITE_WALK_NBR
+	ret
+
+; Animate player jump.
+; Params:
+;    None
+; Return:
+;    None
+; Registers:
+;    af -> Not preserved
+;    bc -> Not preserved
+;    de -> Not preserved
+;    hl -> Not preserved
+playerAnimationJump::
+	ld hl, PLAYER_STRUCT + DISPLAYABLE_OBJECT_STRUCT_SPRITE
+	ld [hl], PLAYER_SPRITE_JUMP_NBR
 	ret
