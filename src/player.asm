@@ -331,7 +331,6 @@ collideRight::
 	ld a, [MAP_PTR_H]
 	ld d, a
 	ld a, [MAP_PTR_L]
-	ld b, b
 	ld e, a
 	inc de
 	inc de ;Get the top right tile of the player
