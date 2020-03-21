@@ -11,14 +11,14 @@
 initPlayers::
 	ld hl, PLAYER_STRUCT
 
-	ld a, $40
+	ld a, PLAYER_POSITION_X
 	ld [hli], a ; BASIC_OBJECT_STRUCT_X_OFF
 	ld a, $10
 	ld [hli], a ; X SIZE
 	xor a
 	ld [hli], a ; BASIC_OBJECT_STRUCT_X_SPEED_OFF
 
-	ld a, $70
+	ld a, PLAYER_POSITION_Y
 	ld [hli], a ; BASIC_OBJECT_STRUCT_Y_OFF
 	ld a, $10
 	ld [hli], a ; Y SIZE
@@ -30,7 +30,29 @@ initPlayers::
 	ld a, %0001
 	ld [hli], a ; DISPLAYABLE_OBJECT_STRUCT_ORIENTATION
 
+	; Init the MAP_PTR.
+	ld hl, MAP_PTR_H
+	ld [hl], MAP >> 8
+
+	ld a, [MAP + MAP_SIZE_Y_OFF]
+	ld c, a
+	ld b, PLAYER_POSITION_Y + 1
+	ld a, MAP & $FF + MAP_SIZE_TILES_OFF
+
+	add PLAYER_POSITION_X
+	jr c, .overflow
+.loop:
+	add c
+	jr c, .overflow
+.endLoop:
+	dec b
+	jr nz, .loop
+	inc hl
+	ld [hl], a
 	ret
+.overflow:
+	inc [hl]
+	jr .endLoop
 
 ; Update the player.
 ; Params:
@@ -130,8 +152,8 @@ movePlayer::
 
 .moveX:
 	; Check collisions.
-	call collideX
-	ret c
+	call collideLeft
+	jp c, collidedLeft
 
 	; Initialize value for the move.
 	ld a, [PLAYER_STRUCT + BASIC_OBJECT_STRUCT_X_SPEED_OFF]
@@ -153,7 +175,6 @@ movePlayer::
 	ret nz
 	bit 7, d
 	jr nz, .underflow
-
 	inc [hl]
 	jp updateCameraH
 
@@ -162,7 +183,7 @@ movePlayer::
 	jp updateCameraH
 
 .moveY:
-	ld b, b
+	;ld b, b
 	ld a, [PLAYER_STRUCT + BASIC_OBJECT_STRUCT_Y_SPEED_OFF]
 	or a
 	ret z
@@ -246,7 +267,7 @@ jump::
 	ret
 
 
-; Check horizontal collisions for the player.
+; Check left collisions for the player.
 ; Params:
 ;    None
 ; Return:
@@ -256,10 +277,35 @@ jump::
 ;    bc -> Not preserved
 ;    de -> Not preserved
 ;    hl -> Not preserved
-collideX::
+collideLeft::
 	ld a, [MAP_PTR_H]
-	ld h, a
+	ld d, a
 	ld a, [MAP_PTR_L]
-	ld l, a
+	ld e, a
+	dec de ; Get the tile at the left of the player
 
+	; Do not collide if the tile is not solid
+	ld a, [de]
+	and TILE_IS_SOLID ; and clear the carry flag.
+	ret z
+
+	; Do not check collisions if the player moves to the right.
+	ld a, [PLAYER_STRUCT + BASIC_OBJECT_STRUCT_X_SPEED_OFF]
+	bit 7, a ; bit clear the carry flag
+	ret z
+	ld b, a
+	ld b,b
+
+	; Calculate the offset of the player compared to the map tile
+	ld a, [SCROLL_X]
+	and 8
+	sub b ; a now contains the position of the player (in pixels) after the movement. 0 represent the left border of the current tile.
+
+	cp 0 ; If position < 0, then the player collide with the tile (he tries to move to the left tiles, else he is still in the current tile.
+	ret
+
+
+collidedLeft::
+	ld hl, PLAYER_STRUCT + BASIC_OBJECT_STRUCT_X_SPEED_OFF
+	inc [hl]
 	ret

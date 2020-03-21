@@ -73,11 +73,13 @@ run::
 	call setGBCPalette
 	reg LCD_CONTROL, LCD_BASE_CONTROL
 
+	call initGravity
 	call initPlayers
 .gameLoop:
 	reset INTERRUPT_REQUEST
 	halt
 
+	call updateGravity
 	call updatePlayer
 	jr .gameLoop
 
@@ -96,3 +98,4 @@ include "src/credits.asm"
 include "src/map.asm"
 include "src/camera.asm"
 include "src/displayable_object.asm"
+include "src/gravity.asm"
