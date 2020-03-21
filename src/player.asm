@@ -133,6 +133,11 @@ movePlayer::
 	push de
 
 .moveX:
+	; Check collisions.
+	call collideX
+	ret c
+
+	; Initialize value for the move.
 	ld a, [PLAYER_STRUCT + BASIC_OBJECT_STRUCT_X_SPEED_OFF]
 	or a
 	ret z
@@ -207,4 +212,23 @@ movePlayer::
 jump::
 	ld hl, PLAYER_STRUCT + BASIC_OBJECT_STRUCT_Y_SPEED_OFF
 	ld [hl], -5
+	ret
+
+
+; Check horizontal collisions for the player.
+; Params:
+;    None
+; Return:
+;    c -> set if the player collide.
+; Registers:
+;    af -> Not preserved
+;    bc -> Not preserved
+;    de -> Not preserved
+;    hl -> Not preserved
+collideX::
+	ld a, [MAP_PTR_H]
+	ld h, a
+	ld a, [MAP_PTR_L]
+	ld l, a
+
 	ret
