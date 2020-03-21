@@ -1,6 +1,10 @@
 waveBTT::
     db $0F, $0F, $0F, $0F, $0F, $0F, $0F, $0F, $0F, $0F, $0F, $0F, $0F, $0F, $0F, $0F
 
+bttIntroThree::
+    db $80, $00, $00, $F7, $86, QUAVER * 2 ; NO SOUND
+    db $80, $00, $00, $F7, $86, $FF ; NO SOUND
+
 bttChannelThree::
 ;mesure 1
     db $80, $00, $40, $9E, $86, QUAVER + QUAVER / 2 ;FA#1

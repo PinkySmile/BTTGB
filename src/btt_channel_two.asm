@@ -1,5 +1,5 @@
 ;channel 2
-bttIntro::
+bttIntroTwo::
 	db $80, $00, $42, $86, $07 ; NO SOUND
 	db $80, $87, $42, $86, INTROLN ; RE1
 	db $80, $87, $5C, $86, INTROLN ; RE#1
