@@ -53,11 +53,18 @@ run::
 	reg INTERRUPT_ENABLED, VBLANK_INTERRUPT
 	call waitVBLANK
 	reset LCD_CONTROL
-	xor a
+
+	ld [WX], a
+	reg WY, $90
+
 	ld de, VRAM_START + PLAYER_SPRITE_NBR * $10
 	ld hl, GameSprites
 	ld bc, GameSpritesEnd - GameSprites
 	call copyMemory
+
+	ld hl, TestMap
+	ld a, BANK(TestMap)
+	call loadMap
 
 	ld a, 0
 	ld hl, playerPal
@@ -70,11 +77,6 @@ run::
 .gameLoop:
 	reset INTERRUPT_REQUEST
 	halt
-
-	xor a
-	ld de, OAM_SRC_START
-	ld bc, $9F
-	call fillMemory
 
 	call updatePlayer
 	jr .gameLoop
@@ -91,4 +93,5 @@ include "src/intro.asm"
 include "src/basic_object.asm"
 include "src/text.asm"
 include "src/credits.asm"
+include "src/map.asm"
 include "src/displayable_object.asm"
