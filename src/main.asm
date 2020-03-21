@@ -84,7 +84,7 @@ run::
 	reset INTERRUPT_REQUEST
 	halt
 
-	call updateGravity
+	;call updateGravity
 	call updatePlayer
 	jr .gameLoop
 
