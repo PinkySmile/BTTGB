@@ -42,6 +42,11 @@ updateGravity::
 	cp [hl]
 	jr z, .overflow
 	inc [hl]
+	ld a, 0
+	cp [hl]
+	jr nz, .skipZero
+	inc [hl]
+.skipZero
 	ld hl, GRAVITY_LIMITER
 	inc [hl]
 	ret
