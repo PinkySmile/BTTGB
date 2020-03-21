@@ -50,6 +50,7 @@ updatePlayer::
 	ld e, l
 	ld hl, PLAYER_STRUCT
 	call renderDisplayableObject
+	call movePlayer
 	ret
 
 ; Read input and execute the actions associated.
@@ -122,4 +123,33 @@ executePlayerActions::
 	ret
 
 .down::
+	ret
+
+
+movePlayer::
+	call .moveX
+	ret
+
+.moveX:
+	ld a, [PLAYER_STRUCT + BASIC_OBJECT_STRUCT_X_SPEED_OFF]
+	ld d, a
+
+	ld hl, SCROLL_X
+	ld a, [hl]
+	add d
+	ld [hl], a
+
+	; Move the map ptr (position of the player on the map)
+	ld hl, MAP_PTR_L
+	ld a, [hl]
+	add d
+	ld [hld], a
+
+	ret nz
+	bit 7, d
+	jp nz, .underflow
+	inc [hl]
+	ret
+.underflow:
+	dec [hl]
 	ret
