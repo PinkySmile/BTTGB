@@ -102,7 +102,7 @@ run::
 	call updatePlayer
 	call updateAnimation
 	call updateMusics
-	call checkCollisionsUnderPlayer
+	;call checkCollisionsUnderPlayer
 	jr .gameLoop
 
 include "src/init.asm"
