@@ -85,6 +85,7 @@ executePlayerActions::
 	ret
 
 .a::
+	call jump
 	ret
 
 .b::
@@ -120,6 +121,7 @@ executePlayerActions::
 	ret
 
 .up::
+	call jump
 	ret
 
 .down::
@@ -186,4 +188,9 @@ movePlayer::
 	ret
 .yUnderflow:
 	dec [hl]
+	ret
+
+jump::
+	ld hl, PLAYER_STRUCT + BASIC_OBJECT_STRUCT_Y_SPEED_OFF
+	ld [hl], -5
 	ret
