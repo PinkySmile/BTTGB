@@ -260,6 +260,6 @@ menuChannelTwo::
     db $80, $87, $62, $87, MQUAVER * 2 ; SOL#2
     db $80, $87, $4F, $87, MQUAVER * 2 ; FA#2
     db $80, $87, $39, $87, MQUAVER * 8 ; MI2
-    db $80, $87, $7C, $87, MQUAVER / 3 * 4 ; SI2
+    db $80, $87, $F7, $86, MQUAVER / 3 * 4 ; SI1
     db $80, $00, $7C, $87, MQUAVER / 3 * 8 ; NO SOUND
     db $80, $00, $7C, $87, $FF ; LOOP

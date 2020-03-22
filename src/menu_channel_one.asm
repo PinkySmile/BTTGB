@@ -56,10 +56,10 @@ menuChannelOne::
 	db $00, $80, $87, $73, $86, MQUAVER ; MI1
 	db $00, $80, $00, $D6, $86, MQUAVER * 2 ; NO SOUND
 ;mesure 9
-	db $00, $80, $87, $14, $87, MQUAVER * 2 ; DO#2
-	db $00, $80, $87, $F7, $86, MQUAVER ; SI1
-	db $00, $80, $87, $D6, $86, MQUAVER ; LA1
-	db $00, $80, $87, $C4, $86, MQUAVER * 2 ; SOL#1
+	db $00, $80, $87, $8A, $87, MQUAVER * 2 ; DO#3
+	db $00, $80, $87, $7C, $87, MQUAVER ; SI2
+	db $00, $80, $87, $6B, $87, MQUAVER ; LA2
+	db $00, $80, $87, $62, $87, MQUAVER * 2 ; SOL#2
 	db $00, $80, $00, $D6, $86, MQUAVER ; NO SOUND
 	db $00, $80, $87, $73, $86, MQUAVER ; MI1
 ;mesure 10
