@@ -70,14 +70,13 @@ updatePlayer::
 	ld hl, PLAYER_STRUCT + BASIC_OBJECT_STRUCT_X_SPEED_OFF
 	ld [hl], 0
 
-	call executePlayerActions
 
 	ld hl, OAM_SRC_START
 	ld d, h
 	ld e, l
 	ld hl, PLAYER_STRUCT
 	call renderDisplayableObject
-	jp movePlayer
+	;call executePlayerActions FALLTHROUGH
 
 ; Read input and execute the actions associated.
 ; Params:
@@ -90,24 +89,29 @@ updatePlayer::
 ;    de -> Preserved
 ;    hl -> Not preserved
 executePlayerActions::
+	call getKeysFiltered
+	ld b, a
+	bit 2, b
+	call z, .up
+	bit 4, b
+	call z, .a
+
 	call getKeys
 	ld b, a
 	bit 0, b
 	call z, .right
 	bit 1, b
 	call z, .left
-	bit 2, b
-	call z, .up
 	bit 3, b
 	call z, .down
-	bit 4, b
-	call z, .a
 	bit 5, b
 	call z, .b
 	bit 6, b
 	call z, .select
 	bit 7, b
-	jp z, .start
+	call z, .start
+
+	jp movePlayer
 
 .b::
 	ret
@@ -153,8 +157,15 @@ executePlayerActions::
 .up::
 	ld a, [PLAYER_STRUCT + BASIC_OBJECT_STRUCT_Y_SPEED_OFF]
 	cp 0
-	ret nz
+	jr z, .ok
 
+	ld a, [PLAYER_STRUCT + HAS_DOUBLE_JUMP_OFF]
+	cp 0
+	ret z
+	xor a
+	ld [PLAYER_STRUCT + HAS_DOUBLE_JUMP_OFF], a
+
+.ok:
 	call initGravity
 	ld hl, PLAYER_STRUCT + BASIC_OBJECT_STRUCT_Y_SPEED_OFF
 	ld [hl], -3
@@ -234,6 +245,8 @@ movePlayer::
 collidedBelow::
 	ld hl, PLAYER_STRUCT + BASIC_OBJECT_STRUCT_Y_SPEED_OFF
 	dec [hl]
+	ld a, 1
+	ld [PLAYER_STRUCT + HAS_DOUBLE_JUMP_OFF], a
 	ret
 
 collidedUp::
