@@ -112,11 +112,11 @@ class Map:
 
     def to_bytes(self):
         return (self.total_size.to_bytes(2, "big")
-                + (0xC1A0 + 0x47 + (self.spawn[0] - 8) + ((self.spawn[1] - 8) * self.size_x)).to_bytes(2, "big")
-                + ((self.size_x << 2) + (self.size_x << 4) - self.size_x + 0xC1A0 + (self.spawn[0] - 8) + (self.spawn[1] - 8) * self.size_x).to_bytes(2, "little")
-                + (21 + 0xC1A0 + (self.spawn[0] - 8) + (self.spawn[1] - 8) * self.size_x).to_bytes(2, "little")
-                + ((self.spawn[0] - 8) + (self.spawn[1] - 8) * self.size_x + 0xC1A0 - 1).to_bytes(2, "little")
-                + ((self.spawn[0] - 8) + (self.spawn[1] - 8) * self.size_x + 0xC1A0 - self.size_x).to_bytes(2, "little")
+                + (0xC1A0 + 0x47 + (self.spawn[0]) + ((self.spawn[1]) * self.size_x)).to_bytes(2, "big")
+                + ((self.size_x << 2) + (self.size_x << 4) - self.size_x + 0xC1A0 + 0x47 + (self.spawn[0] - 8) + (self.spawn[1] - 8) * self.size_x).to_bytes(2, "little")
+                + (21 + 0xC1A0 + 0x47 + (self.spawn[0] - 8) + (self.spawn[1] - 8) * self.size_x).to_bytes(2, "little")
+                + ((self.spawn[0] - 8) + (self.spawn[1] - 8) * self.size_x + 0xC1A0 + 0x47 - 1).to_bytes(2, "little")
+                + ((self.spawn[0] - 8) + (self.spawn[1] - 8) * self.size_x + 0xC1A0 + 0x47 - self.size_x).to_bytes(2, "little")
                 + self.size_x.to_bytes(1, "big")
                 + self.size_y.to_bytes(1, "big")
                 + len([i for i in self.tiles if i.is_target]).to_bytes(1, "big")
