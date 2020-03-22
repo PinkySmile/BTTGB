@@ -33,6 +33,110 @@ initPlayers::
 
 endGame::
 	ld sp, $E000
+	reset LCD_CONTROL
+
+	ld de, VRAM_START
+	ld bc, $1C00
+	call fillMemory
+
+	xor a
+	ld bc, $A0
+	ld de, OAM_SRC_START
+	call fillMemory
+
+	reg VRAM_BANK_SELECT, 1
+	ld de, VRAM_START
+	ld bc, $1C00
+	call fillMemory
+	reset VRAM_BANK_SELECT
+
+	ld hl, finalScore
+	ld bc, finalScoreEnd - finalScore
+	ld de, $9A20
+	call copyMemory
+
+	xor a
+	ld bc, $18
+	ld hl, DMGPal
+	ld e, BGPI & $FF
+	call setGBCPalette
+	call loadSprites
+	ld hl, pressStart
+	ld bc, pressStartEnd - pressStart
+	ld de, $9984
+	call copyMemory
+
+	ld hl, VRAM_BG_START + $20 + 6
+	ld b, 8
+	ld a, $60
+.copyLogo:
+	ld c, 8
+.copyLogoLine::
+	push af
+	ld [hl], a
+	reg VRAM_BANK_SELECT, 1
+	ld [hli], a
+	reset VRAM_BANK_SELECT
+	pop af
+	inc a
+	dec c
+	jr nz, .copyLogoLine
+
+	push af
+	ld a, l
+	add $20 - 8
+	ld l, a
+	ld a, h
+	adc $0
+	ld h, a
+	pop af
+
+	dec b
+	jr nz, .copyLogo
+
+	reset SCROLL_X
+	reset SCROLL_Y
+
+	ld hl, MenuLogo
+	ld bc, MenuLogoEnd - MenuLogo
+	ld de, $8600
+	call copyMemory
+
+	reg LCD_CONTROL, LCD_BASE_CONTROL
+
+.loop:
+	call waitVBLANK
+	call updateMusics
+	call getKeys
+	bit 7, a
+	jr nz, .loop
+
+.mainMenu:
+	reset LCD_CONTROL
+
+	ld de, VRAM_START
+	ld bc, $1800
+	call fillMemory
+
+	xor a
+	ld de, MUSIC_CHANNEL_1
+	ld bc, 20
+	call fillMemory
+
+	xor a
+	ld bc, $18
+	ld hl, DMGPal
+	ld e, BGPI & $FF
+	call setGBCPalette
+	call loadSprites
+
+	xor a
+	ld hl, textAssets + 32 * 8
+	ld bc, textAssetsEnd - (textAssets + 32 * 8)
+	ld de, VRAM_START + 32 * 16
+	call uncompress
+
+	reg WY, $90
 	jp mainMenu
 
 ; Update the player.
