@@ -90,7 +90,7 @@ updateCameraH::
 	ret
 
 .left:
-	ld hl, TOP_RIGHT_VRAM_START_L
+	ld hl, LEFT_LEFT_VRAM_START_L
 	ld a, [hli]
 	ld e, a
 	ld a, [hli]
