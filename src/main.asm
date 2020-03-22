@@ -167,11 +167,18 @@ run::
 	ld bc, PlayerSpritesEnd - PlayerSprites
 	call copyMemory
 
-	ld hl, TestMap
-	ld a, BANK(TestMap)
+	ld de, allMaps
+	ld a, [de]
+	ld l, a
+	inc de
+	ld a, [de]
+	ld h, a
+	inc de
+	ld a, [de]
 	call loadMap
 
-	ld a, 0
+	xor a
+	ld [CURRENTLY_LOADED_MAP], a
 	ld hl, playerPal
 	ld e, OBPI & $FF
 	ld bc, 8

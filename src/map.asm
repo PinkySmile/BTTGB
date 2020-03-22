@@ -1,8 +1,25 @@
+allMaps::
+	dw MapTuto
+	db BANK(MapTuto)
+	dw Map1
+	db BANK(Map1)
+	dw Map2
+	db BANK(Map2)
+	dw Map3
+	db BANK(Map3)
+	dw Map4
+	db BANK(Map4)
+	dw Map5
+	db BANK(Map5)
+	dw Map6
+	db BANK(Map6)
+allMapsEnd::
+
 copyMap::
 	ld a, [hli]
 	ld b, a
 	ld a, [hli]
-	add $42
+	add $49
 	ld c, a
 	ld a, b
 	adc $00
