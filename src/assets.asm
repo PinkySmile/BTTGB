@@ -66,6 +66,9 @@ PlayerSprites::
 
     incbin "assets/player/player_jump/player_jump.cfx"
 
+    incbin "assets/player/player_tag/player_tag1.cfx"
+    incbin "assets/player/player_tag/player_tag2.cfx"
+
 PlayerSpritesEnd::
 
 include "src/palettes.asm"
