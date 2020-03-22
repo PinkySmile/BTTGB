@@ -191,6 +191,7 @@ credits::
 	ld [CREDITS_LAST_ADDR_L], a
 
 .skip:
+	call updateMusics
 	call getKeys
 	xor $FF
 	jr nz, .mainMenu

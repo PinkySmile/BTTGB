@@ -22,6 +22,13 @@ main::
 	jp intro
 
 mainMenu::
+    ld de, menuChannelOne
+	ld hl, MUSIC_CHANNEL_1
+	call playMusic
+	ld de, menuChannelTwo
+	ld hl, MUSIC_CHANNEL_2
+	call playMusic
+
 	ld de, OAM_SRC_START
 	ld bc, $A0
 	xor a
@@ -34,6 +41,7 @@ mainMenu::
 	call random
 	reset INTERRUPT_REQUEST
 	halt
+	call updateMusics
 	jr nz, .skip
 .skip:
 	pop af

@@ -6,7 +6,7 @@ menuChannelOne::
 	db $00, $80, $87, $F7, $86, MQUAVER  ; SI1
 	db $00, $80, $87, $D6, $86, MQUAVER ; LA1
 	db $00, $80, $87, $C4, $86, MQUAVER * 2 ; SOL#1
-	db $00, $80, $00, $D6, $86, MQUAVER * 2 ; NO SOUND
+	db $00, $80, $00, $D6, $86, MQUAVER ; NO SOUND
 	db $00, $80, $87, $73, $86, MQUAVER ; MI1
 ;mesure 2
 	db $00, $80, $00, $D6, $86, MQUAVER * 2 ; NO SOUND
