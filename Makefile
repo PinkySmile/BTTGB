@@ -25,14 +25,19 @@ SRCS = \
 OBJS = $(SRCS:%.asm=%.o)
 
 
-IMGS = assets/tiles/n0default.png \
+IMGS = assets/tiles/n0target.png \
 	assets/tiles/n1reaped_poster.png \
 	assets/tiles/n2long.png \
 	assets/tiles/n3loul.png \
 	assets/tiles/n4brick.png \
 	assets/tiles/n5vBrick.png \
-	assets/tiles/s0ground.png \
-	assets/tiles/s1one_way.png \
+	assets/tiles/n6default.png \
+	assets/tiles/n9wah.png \
+	assets/tiles/n10corona.png \
+	assets/tiles/n11bitTrip.png \
+	assets/tiles/n12poke.png \
+	assets/tiles/s0one_way.png \
+	assets/tiles/s1ground.png \
 	assets/tiles/s2wall.png
 
 IMGS_FX = $(IMGS:%.png=%.fx)

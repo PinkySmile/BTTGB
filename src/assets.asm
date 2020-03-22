@@ -19,24 +19,24 @@ JAMLettersEnd::
 
 ; All the sprites needed by the game
 GameSprites::
-	incbin "assets/tiles/n0default.fx"
+	incbin "assets/tiles/n0target.fx"
 	incbin "assets/tiles/n1reaped_poster.fx"
 	incbin "assets/tiles/n2long.fx"
 	incbin "assets/tiles/n3loul.fx"
 	incbin "assets/tiles/n4brick.fx"
 	incbin "assets/tiles/n5vBrick.fx"
-	incbin "assets/tiles/n5vBrick.fx" ; 6
+	incbin "assets/tiles/n6default.fx"
 	incbin "assets/tiles/n5vBrick.fx" ; 7
 	incbin "assets/tiles/n5vBrick.fx" ; 8
-	incbin "assets/tiles/n5vBrick.fx" ; 9
-	incbin "assets/tiles/n5vBrick.fx" ; 10
-	incbin "assets/tiles/n5vBrick.fx" ; 11
-	incbin "assets/tiles/n5vBrick.fx" ; 12
+	incbin "assets/tiles/n9wah.fx"
+	incbin "assets/tiles/n10corona.fx"
+	incbin "assets/tiles/n11bitTrip.fx"
+	incbin "assets/tiles/n12poke.fx"
 	incbin "assets/tiles/n5vBrick.fx" ; 13
 	incbin "assets/tiles/n5vBrick.fx" ; 14
 	incbin "assets/tiles/n5vBrick.fx" ; 15
-	incbin "assets/tiles/s0ground.fx"
-	incbin "assets/tiles/s1one_way.fx"
+	incbin "assets/tiles/s0one_way.fx"
+	incbin "assets/tiles/s1ground.fx"
 	incbin "assets/tiles/s2wall.fx"
 	incbin "assets/tiles/s2wall.fx" ; 3
 	incbin "assets/tiles/s2wall.fx" ; 4
