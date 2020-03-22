@@ -554,7 +554,7 @@ collideLeft::
 	; Do not check collisions if the player moves to the right.
 .ok:
 	ld a, [PLAYER_STRUCT + BASIC_OBJECT_STRUCT_X_SPEED_OFF]
-	bit 7, a ; bit clear the carry flag
+	bit 7, a ; the c flag can't be set because the 'and' clear it.
 	ret z
 
 	scf ; set the carry flag
@@ -595,7 +595,7 @@ collideRight::
 	; Do not check collisions if the player moves to the left.
 .ok:
 	ld a, [PLAYER_STRUCT + BASIC_OBJECT_STRUCT_X_SPEED_OFF]
-	bit 7, a ; bit clear the carry flag
+	bit 7, a ; the c flag can't be set because the 'and' clear it.
 	ret nz
 	or a ; or clear the carry flag
 	ret z
@@ -645,7 +645,7 @@ collideBelow::
 
 .ok:
 	ld a, [PLAYER_STRUCT + BASIC_OBJECT_STRUCT_Y_SPEED_OFF]
-	bit 7, a ; bit clear the carry flag
+	bit 7, a  ; the c flag can't be set because the 'and' clear it.
 	ret nz
 	or a
 	ret z
@@ -691,7 +691,7 @@ collideUp::
 	ret z
 
 	ld a, [PLAYER_STRUCT + BASIC_OBJECT_STRUCT_Y_SPEED_OFF]
-	bit 7, a ; bit clear the carry flag
+	bit 7, a  ; the c flag can't be set because the 'and' clear it.
 	ret z
 
 	scf ; set the carry flag
