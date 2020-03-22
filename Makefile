@@ -54,6 +54,8 @@ COMPRESSED_IMGS_FX = $(COMPRESSED_IMGS:%.png=%.zfx)
 
 
 COLORED_IMGS = \
+	assets/menu/logo.png \
+	assets/menu/logo1.png \
 	assets/player/player_idle/player_idle1.png \
 	assets/player/player_idle/player_idle2.png \
 	assets/player/player_idle/player_idle3.png \

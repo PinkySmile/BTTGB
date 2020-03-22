@@ -148,4 +148,4 @@ intro::
 	call uncompress
 	reg LCD_CONTROL, LCD_BASE_CONTROL
 	di
-	jp mainMenu
+	ret

@@ -25,6 +25,13 @@ credits::
 	ld bc, $800
 	call fillMemory
 
+	reg VRAM_BANK_SELECT, 1
+	ld de, $9800
+	xor a
+	ld bc, $800
+	call fillMemory
+	reset VRAM_BANK_SELECT
+
 	ld hl, creditsText
 	ld bc, creditsTextEnd - creditsText
 	ld de, $9800

@@ -19,9 +19,15 @@ lockup::
 main::
 	call init               ; Init
 	ld sp, $E000            ; Init stack
-	jp intro
+	call intro
 
 mainMenu::
+	call waitVBLANK
+	reset LCD_CONTROL
+	ld [WX], a
+
+	reg WY, $90
+
 	ld de, menuChannelOne
 	ld hl, MUSIC_CHANNEL_1
 	call playMusic
@@ -32,12 +38,69 @@ mainMenu::
 	ld hl, MUSIC_CHANNEL_WAVE
 	call playMusic
 
+	ld hl, LogoPal
+	ld a, $8
+	ld bc, $8
+	ld e, BGPI & $FF
+	call setGBCPalette
+
+
+	ld hl, MenuLogo
+	ld bc, MenuLogoEnd - MenuLogo
+	ld de, $8600
+	call copyMemory
+
+.lateInit:
+	call waitVBLANK
+	reset LCD_CONTROL
+
+	ld de, VRAM_BG_START
+	ld bc, $400
+	xor a
+	call fillMemory
+
+	reg VRAM_BANK_SELECT, 1
+	ld de, VRAM_BG_START
+	ld bc, $400
+	xor a
+	call fillMemory
+	ld [VRAM_BANK_SELECT], a
+
 	ld de, OAM_SRC_START
 	ld bc, $A0
 	xor a
 	call fillMemory
 
-.lateInit:
+	ld hl, VRAM_BG_START + $20 + 6
+	ld b, 8
+	ld a, $60
+.copyLogo:
+	ld c, 8
+.copyLogoLine::
+	push af
+	ld [hl], a
+	reg VRAM_BANK_SELECT, 1
+	ld [hli], a
+	reset VRAM_BANK_SELECT
+	pop af
+	inc a
+	dec c
+	jr nz, .copyLogoLine
+
+	push af
+	ld a, l
+	add $20 - 8
+	ld l, a
+	ld a, h
+	adc $0
+	ld h, a
+	pop af
+
+	dec b
+	jr nz, .copyLogo
+
+	reg LCD_CONTROL, LCD_BASE_CONTROL
+
 	xor a
 	push af
 .loop:
