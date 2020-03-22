@@ -190,7 +190,7 @@ def main(args):
                     game_map[real_x, real_y] = sprites[selected]
                     surface.blit(sprites[selected].pyg_image, (real_x * 8, real_y * 8))
                 if pygame.mouse.get_pressed()[2]:
-                    surface.blit(game_map[real_x, real_y].pyg_image, (game_map.spawn[0] * 8, game_map.spawn[1] * 8))
+                    surface.blit(game_map[game_map.spawn[0], game_map.spawn[1]].pyg_image, (game_map.spawn[0] * 8, game_map.spawn[1] * 8))
                     game_map.spawn = (real_x, real_y)
                     pygame.draw.rect(surface, 0x00FF00, pygame.Rect(game_map.spawn[0] * 8, game_map.spawn[1] * 8, 8, 8))
 
