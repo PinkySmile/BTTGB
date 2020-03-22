@@ -166,6 +166,7 @@ tag::
 .ok:
 	call random
 	and %11
+
 	ld b, h
 	ld c, l
 
@@ -177,6 +178,7 @@ tag::
 	push de
 	ld de, MAP + MAP_TAGS_OFF
 	add hl, de
+	ld b, b
 	pop de
 	ld a, [hl]
 	push af
@@ -225,8 +227,8 @@ tag::
 	and a, TILE_TEXTURE ; a now contails the texture id
 	ld [hl], a
 
-	pop af
 	reg VRAM_BANK_SELECT, 1
+	pop af
 	and a, TILE_PALETTE
 	rra
 	rra

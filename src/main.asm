@@ -112,11 +112,12 @@ run::
 .gameLoop:
 	reset INTERRUPT_REQUEST
 	halt
-
+	call displayTimer
 	call updateGravity
 	call updatePlayer
 	call updateAnimation
 	call updateMusics
+	call updateTimer
 	jr .gameLoop
 
 include "src/init.asm"
@@ -143,3 +144,4 @@ include "src/player_animation.asm"
 include "src/menu_channel_one.asm"
 include "src/menu_channel_two.asm"
 include "src/menu_channel_three.asm"
+include "src/timer.asm"
