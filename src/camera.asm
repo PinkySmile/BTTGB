@@ -63,13 +63,19 @@ updateCameraH::
 
 .changeLoopRight:
       	ld a, [hl]
-      	add $1
-      	ld [hli], a
+      	push bc
+      	push af
+      	inc a
+      	and %00011111
+      	ld b, a
 
-      	ld a, [hl]
-      	adc $0
-      	and $9B
+      	pop af
+      	and %11100000
+      	or b
+      	pop bc
+
       	ld [hli], a
+	inc hl
 
       	ld a, [hl]
       	add $1
@@ -84,7 +90,6 @@ updateCameraH::
 	ret
 
 .left:
-
 	ld hl, TOP_RIGHT_VRAM_START_L
 	ld a, [hli]
 	ld e, a
@@ -143,14 +148,19 @@ updateCameraH::
 
 .changeLoopLeft:
       	ld a, [hl]
-      	sub $1
-      	ld [hli], a
+      	push bc
+      	push af
+      	dec a
+      	and %00011111
+      	ld b, a
 
-      	ld a, [hl]
-      	sbc $0
-      	or $98
-      	and $9B
+      	pop af
+      	and %11100000
+      	or b
+      	pop bc
+
       	ld [hli], a
+	inc hl
 
       	ld a, [hl]
       	sub $1
