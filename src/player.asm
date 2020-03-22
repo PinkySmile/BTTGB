@@ -93,8 +93,7 @@ executePlayerActions::
 	ld b, a
 	bit 2, b
 	call z, .up
-	bit 4, b
-	call z, .a
+	push bc
 
 	call getKeys
 	ld b, a
@@ -111,11 +110,11 @@ executePlayerActions::
 	bit 7, b
 	call z, .start
 
-	jp movePlayer
-
-.b::
+	call movePlayer
+	pop bc
+	bit 4, b
+	call z, .a
 	ret
-
 .start::
 	ret
 
@@ -153,6 +152,9 @@ executePlayerActions::
 	dec [hl]
 	ret
 
+.down::
+	ret
+
 .a::
 .up::
 	ld a, [PLAYER_STRUCT + BASIC_OBJECT_STRUCT_Y_SPEED_OFF]
@@ -171,9 +173,76 @@ executePlayerActions::
 	ld [hl], -3
 	ret
 
-.down::
-	ret
+.b::
+	ld a, [MAP_PTR_H]
+	ld h, a
+	ld a, [MAP_PTR_L]
+	ld l, a
 
+	ld a, [hl]
+	or a
+	ret nz ; Check if the tile is a target
+
+	call random
+	and %11
+	push hl
+
+	ld h, 0
+	ld l, a
+	ld de, MAP + MAP_TAGS_OFF
+	add hl, de
+	ld a, [hl]
+
+	pop hl
+	ld [hl], a ; Change the tile in the ram.
+
+	ld hl, STAT_CONTROL
+.waitEndHBlank:
+	bit 1, [hl]
+	jr z, .waitEndHBlank
+.waitHBlank:
+	bit 1, [hl]
+	jr nz, .waitHBlank
+
+	call getCamPos
+	ld a, l
+	and %11100000
+	ld c, a
+	ld a, PLAYER_POSITION_X / 8
+	add l
+	and %00011111
+	or c
+	ld l, a
+	ld a, $20
+	ld d, 0
+	ld e, a
+	rl e
+	rl d
+	rl e
+	rl d
+	rl e
+	rl d
+	add hl, de ; hl now contains the vram address of the target's texture.
+	ld a, h
+	and $9B
+	ld h, a
+
+	push af
+	and a, TILE_TEXTURE ; a now contails the texture id
+	ld [hl], a
+
+	pop af
+	reg VRAM_BANK_SELECT, 1
+	and a, TILE_PALETTE
+	rra
+	rra
+	rra
+	rra
+	rra ; a now contails the palette id
+	ld [hl], a
+	reset VRAM_BANK_SELECT
+
+	ret
 
 
 collidedLeft::
