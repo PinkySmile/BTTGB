@@ -123,7 +123,7 @@ class Map:
 
 
 def main(args):
-    sprites = [Tile(f"{os.path.abspath(i)}") for i in sorted(os.listdir(args.sprite_folder)) if i.endswith('.png')]
+    sprites = [Tile(os.path.abspath(f"{args.sprite_folder}/{i}")) for i in sorted(os.listdir(args.sprite_folder)) if i.endswith('.png')]
     #if len(sprites) != palettes:
     #    raise Exception(f"You must have the same number of sprites and palettes, found {sprites} sprites and {palettes} palettes")
 
@@ -132,7 +132,7 @@ def main(args):
     else:
         if args.x is None or args.y is None:
             raise Exception("Invalid Usage: ./main.py sprite_folder -x [x] -y [y]")
-        game_map = Map(args.x, args.y, sprites[-1])
+        game_map = Map(args.x, args.y, sprites[9])
 
     pygame.init()
     window_surface = pygame.display.set_mode((game_map.size_x * 8, game_map.size_y * 8), flags=pygame.RESIZABLE)
