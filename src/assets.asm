@@ -60,12 +60,19 @@ PlayerSprites::
 	incbin "assets/player/player_idle/player_idle4.cfx"
 
 	incbin "assets/player/player_walk/player_walk1.cfx"
-    incbin "assets/player/player_walk/player_walk2.cfx"
-    incbin "assets/player/player_walk/player_walk3.cfx"
-    incbin "assets/player/player_walk/player_walk4.cfx"
+	incbin "assets/player/player_walk/player_walk2.cfx"
+	incbin "assets/player/player_walk/player_walk3.cfx"
+	incbin "assets/player/player_walk/player_walk4.cfx"
 
-    incbin "assets/player/player_jump/player_jump.cfx"
-
+	incbin "assets/player/player_jump/player_jump.cfx"
 PlayerSpritesEnd::
+
+MenuLogo::
+	incbin "assets/menu/logo.cfx"
+MenuLogoEnd::
+
+MenuLogoNoText::
+	incbin "assets/menu/logo1.cfx"
+MenuLogoEndText::
 
 include "src/palettes.asm"

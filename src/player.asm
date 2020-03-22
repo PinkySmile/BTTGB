@@ -250,8 +250,8 @@ tag::
 	and a, TILE_TEXTURE ; a now contails the texture id
 	ld [hl], a
 
-	pop af
 	reg VRAM_BANK_SELECT, 1
+	pop af
 	and a, TILE_PALETTE
 	rra
 	rra

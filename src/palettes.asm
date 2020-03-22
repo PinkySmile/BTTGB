@@ -6,3 +6,6 @@ playerPal::
 
 DMGPal::
 	dw $7FFF, $5294, $294A, $0000
+
+LogoPal::
+	incbin "assets/menu/logo.pal"
