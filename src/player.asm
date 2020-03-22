@@ -93,8 +93,7 @@ executePlayerActions::
 	ld b, a
 	bit 2, b
 	call z, .up
-	bit 4, b
-	call z, .a
+	push bc
 
 	call getKeys
 	ld b, a
@@ -111,8 +110,11 @@ executePlayerActions::
 	bit 7, b
 	call z, .start
 
-	jp movePlayer
-
+	call movePlayer
+	pop bc
+	bit 4, b
+	call z, .a
+	ret
 .start::
 	ret
 
@@ -183,21 +185,29 @@ executePlayerActions::
 
 	call random
 	and %11
-	push hl
+	ld b, h
+	ld c, l
 
 	ld h, 0
 	ld l, a
 	ld de, MAP + MAP_TAGS_OFF
 	add hl, de
 	ld a, [hl]
+	push af
 
-	pop hl
+	ld h, b
+	ld l, c
 	ld [hl], a ; Change the tile in the ram.
 
-	; SHOULD WAIT FOR H BLANK HERE
+	ld hl, STAT_CONTROL
+.waitEndHBlank:
+	bit 1, [hl]
+	jr z, .waitEndHBlank
+.waitHBlank:
+	bit 1, [hl]
+	jr nz, .waitHBlank
 
 	call getCamPos
-	ld b, b
 	ld a, l
 	and %11100000
 	ld c, a
@@ -220,8 +230,7 @@ executePlayerActions::
 	and $9B
 	ld h, a
 
-	ld b, b
-
+	pop af
 	push af
 	and a, TILE_TEXTURE ; a now contails the texture id
 	ld [hl], a
