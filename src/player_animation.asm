@@ -9,8 +9,7 @@
 ;    de -> Not preserved
 ;    hl -> Not preserved
 initAnimation::
-	ld hl, ANIMATION_TIMER
-	ld [hl], ANIMATION_TIME
+	reg ANIMATION_TIMER, ANIMATION_TIME
 	ret
 
 ; Update animations.
@@ -25,14 +24,23 @@ initAnimation::
 ;    hl -> Not preserved
 updateAnimation::
 	ld hl, ANIMATION_TIMER
-	ld a, 0
+	xor a
 	cp [hl]
-	jr z, .animate
-	dec [hl]
-	ret
+	jr nz, .notReady
 
-.animate
-	ld a, 0
+	ld hl, PLAYER_STRUCT + DISPLAYABLE_OBJECT_STRUCT_SPRITE
+	inc [hl]
+	inc [hl]
+	inc [hl]
+	inc [hl]
+	call initAnimation
+	jr .end
+
+.notReady::
+	dec [hl]
+
+.end:
+	xor a
 
 	ld hl, PLAYER_STRUCT + BASIC_OBJECT_STRUCT_Y_SPEED_OFF
 	cp [hl]
@@ -42,21 +50,20 @@ updateAnimation::
 	cp [hl]
 	jr nz, .walk
 
-	call playerAnimationIdle
-	call initAnimation
+	ld a, PLAYER_SPRITE_NBR
+	call playerAnimation
 	ret
 
-.walk
-	call playerAnimationWalk
-	call initAnimation
+.walk:
+	ld a, PLAYER_SPRITE_WALK_NBR
+	call playerAnimation
 	ret
 
-.jump
-	call playerAnimationJump
-	call initAnimation
-	ret
+.jump:
+	jp playerAnimationJump
 
-; Animate player idle.
+
+; Animate player.
 ; Params:
 ;    None
 ; Return:
@@ -66,45 +73,23 @@ updateAnimation::
 ;    bc -> Not preserved
 ;    de -> Not preserved
 ;    hl -> Not preserved
-playerAnimationIdle::
+playerAnimation::
+	push af
+	dec a
 	ld hl, PLAYER_STRUCT + DISPLAYABLE_OBJECT_STRUCT_SPRITE
-	inc [hl]
-	inc [hl]
-	inc [hl]
-	inc [hl]
-	ld a, PLAYER_SPRITE_NBR + 12
 	cp [hl]
-	jr c, .resetIdleAnim
-	ret
+	jr nc, .resetAnim
 
-.resetIdleAnim
-	ld [hl], PLAYER_SPRITE_NBR
-	ret
-
-; Animate player walk.
-; Params:
-;    None
-; Return:
-;    None
-; Registers:
-;    af -> Not preserved
-;    bc -> Not preserved
-;    de -> Not preserved
-;    hl -> Not preserved
-playerAnimationWalk::
-	ld hl, PLAYER_STRUCT + DISPLAYABLE_OBJECT_STRUCT_SPRITE
-	inc [hl]
-	inc [hl]
-	inc [hl]
-	inc [hl]
-	ld a, PLAYER_SPRITE_WALK_NBR + 12
+	add 13
 	cp [hl]
-	jr c, .resetWalkAnim
+	jr c, .resetAnim
+	pop af
 	ret
 
-.resetWalkAnim
-	ld [hl], PLAYER_SPRITE_WALK_NBR
-	ret
+.resetAnim:
+	pop af
+	ld [hl], a
+	jp initAnimation
 
 ; Animate player jump.
 ; Params:
@@ -117,6 +102,5 @@ playerAnimationWalk::
 ;    de -> Not preserved
 ;    hl -> Not preserved
 playerAnimationJump::
-	ld hl, PLAYER_STRUCT + DISPLAYABLE_OBJECT_STRUCT_SPRITE
-	ld [hl], PLAYER_SPRITE_JUMP_NBR
+	reg PLAYER_STRUCT + DISPLAYABLE_OBJECT_STRUCT_SPRITE, PLAYER_SPRITE_JUMP_NBR
 	ret

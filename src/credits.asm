@@ -54,7 +54,11 @@ credits::
 .loop:
 	ld a, [LY]
 	cp $90
-	jr nz, .loop
+	jr z, .loop
+.loop2:
+	ld a, [LY]
+	cp $90
+	jr nz, .loop2
 
 	ld a, [CREDITS_SLIDING]
 	ld hl, CREDITS_LINE_POS

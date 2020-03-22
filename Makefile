@@ -25,7 +25,8 @@ SRCS = \
 OBJS = $(SRCS:%.asm=%.o)
 
 
-IMGS = assets/tiles/n0target.png \
+IMGS = \
+	assets/tiles/n0target.png \
 	assets/tiles/n1reaped_poster.png \
 	assets/tiles/n2long.png \
 	assets/tiles/n3loul.png \
@@ -52,15 +53,16 @@ COMPRESSED_IMGS = \
 COMPRESSED_IMGS_FX = $(COMPRESSED_IMGS:%.png=%.zfx)
 
 
-COLORED_IMGS = assets/player/player_idle/player_idle1.png \
-				assets/player/player_idle/player_idle2.png \
-				assets/player/player_idle/player_idle3.png \
-				assets/player/player_idle/player_idle4.png \
-				assets/player/player_walk/player_walk1.png \
-				assets/player/player_walk/player_walk2.png \
-				assets/player/player_walk/player_walk3.png \
-				assets/player/player_walk/player_walk4.png \
-				assets/player/player_jump/player_jump.png \
+COLORED_IMGS = \
+	assets/player/player_idle/player_idle1.png \
+	assets/player/player_idle/player_idle2.png \
+	assets/player/player_idle/player_idle3.png \
+	assets/player/player_idle/player_idle4.png \
+	assets/player/player_walk/player_walk1.png \
+	assets/player/player_walk/player_walk2.png \
+	assets/player/player_walk/player_walk3.png \
+	assets/player/player_walk/player_walk4.png \
+	assets/player/player_jump/player_jump.png \
 
 COLORED_IMGS_FX = $(COLORED_IMGS:%.png=%.cfx)
 

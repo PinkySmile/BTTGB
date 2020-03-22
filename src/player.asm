@@ -98,7 +98,6 @@ executePlayerActions::
 
 	call getKeys
 	ld b, a
-	push bc
 	bit 0, b
 	call z, .right
 	bit 1, b
@@ -111,10 +110,8 @@ executePlayerActions::
 	call z, .start
 
 	call movePlayer
-	pop bc
-	bit 5, b
-	call z, .b
-	ret
+	jr tag
+
 .start::
 	ret
 
@@ -173,7 +170,7 @@ executePlayerActions::
 	ld [hl], -3
 	ret
 
-.b::
+tag::
 	ld a, [MAP_PTR_H]
 	ld h, a
 	ld a, [MAP_PTR_L]
@@ -183,7 +180,7 @@ executePlayerActions::
 
 	ld a, [hl]
 	or a
-	jr z, .b_ok ; Check if the tile is a target
+	jr z, .ok ; Check if the tile is a target
 
 	inc hl
 	ld a, [hl]
@@ -191,11 +188,14 @@ executePlayerActions::
 	ret nz
 	ld e, 1
 
-.b_ok:
+.ok:
 	call random
 	and %11
 	ld b, h
 	ld c, l
+
+	ld hl, MAP + MAP_NB_TARGETS_OFF
+	dec [hl]
 
 	ld h, 0
 	ld l, a
@@ -579,10 +579,13 @@ collideUp::
 	ret z
 
 .ok:
+	; check if it is a one way
+	ld a, [de]
+	and %00001111
+	ret z
+
 	ld a, [PLAYER_STRUCT + BASIC_OBJECT_STRUCT_Y_SPEED_OFF]
 	bit 7, a ; bit clear the carry flag
-	ret z
-	and %00001111
 	ret z
 
 	scf ; set the carry flag
