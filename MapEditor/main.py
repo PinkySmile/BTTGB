@@ -13,7 +13,6 @@ parser.add_argument("-y", help="vertical size of the map", type=int)
 parser.add_argument("--load", help="Load the given file")
 
 FILE_REGEX = re.compile(r"([sn])(\d\d?)(.*)")
-
 palettes = []
 
 class Tile:
@@ -38,6 +37,7 @@ class Tile:
         self.id = int(match[2])
         if self.id not in range(0, 16):
             raise Exception(f"Image ID must be between 0 and 15, but it was {self.id}")
+        self.is_target = not self.is_solid and self.id == 0
         self.description = match[3]
         tmp_pal = Palette.from_file(self.pal_file_name)
         if tmp_pal not in palettes:
@@ -84,12 +84,19 @@ class Palette:
 
 
 class Map:
-    def __init__(self, x : int, y : int, default_tile):
+    def __init__(self, x : int, y : int, default_tile, default_wall):
         self.size_x = x
         self.size_y = y
         self.size = (x, y)
         self.total_size = x * y
-        self.tiles = [default_tile for i in range(self.total_size)]
+        self.tiles = []
+        self.spawn = (8, 8)
+        for j in range(self.size_y):
+            for i in range(self.size_x):
+                if 8 <= i < self.size_x - 8 and 8 <= j < self.size_y - 8:
+                    self.tiles.append(default_tile)
+                else:
+                    self.tiles.append(default_wall)
 
     def __setitem__(self, key, value):
         if isinstance(key, tuple):
@@ -97,25 +104,38 @@ class Map:
         else:
             raise TypeError("Map.__setitem__ key must be a tuple")
 
-    def __getitem__(self, key):
+    def __getitem__(self, key) -> Tile:
         if isinstance(key, tuple):
             return self.tiles[key[0] + key[1] * self.size_x]
         else:
             raise TypeError("Map.__setitem__ key must be a tuple")
 
     def to_bytes(self):
-        return (self.total_size.to_bytes(2, "big") + self.size_x.to_bytes(1, "big") + self.size_y.to_bytes(1, "big") + b"\xc9*KL"
-                + b''.join([p.bytes for p in palettes]) + b'\x00' * 8 * (8 - len(palettes)) + b''.join([i.to_byte() for i in self.tiles])
+        return (self.total_size.to_bytes(2, "big")
+                + (0xC1A0 + 0x47 + (self.spawn[0] - 8) + ((self.spawn[1] - 8) * self.size_x)).to_bytes(2, "big")
+                + ((self.size_x << 2) + (self.size_x << 4) - self.size_x + 0xC1A0 + (self.spawn[0] - 8) + (self.spawn[1] - 8) * self.size_x).to_bytes(2, "little")
+                + (21 + 0xC1A0 + (self.spawn[0] - 8) + (self.spawn[1] - 8) * self.size_x).to_bytes(2, "little")
+                + ((self.spawn[0] - 8) + (self.spawn[1] - 8) * self.size_x + 0xC1A0 - 1).to_bytes(2, "little")
+                + ((self.spawn[0] - 8) + (self.spawn[1] - 8) * self.size_x + 0xC1A0 - self.size_x).to_bytes(2, "little")
+                + self.size_x.to_bytes(1, "big")
+                + self.size_y.to_bytes(1, "big")
+                + len([i for i in self.tiles if i.is_target]).to_bytes(1, "big")
+                + b"\xc9*KL"
+                + b''.join([p.bytes for p in palettes]) + b'\x00' * 8 * (8 - len(palettes))
+                + b''.join([i.to_byte() for i in self.tiles])
                 )
 
     @classmethod
     def load(cls, file, tiles):
         with open(file, 'rb') as fd:
             total_size = int.from_bytes(fd.read(2), "big")
+            spawn = (fd.read(1)[0] + 8, fd.read(1)[0] + 8)
+            _ = fd.read(8)
             x = fd.read(1)[0]
             y = fd.read(1)[0]
+            nb_target = fd.read(1)
             tags = fd.read(4)
-            self = cls(x, y, tiles[0])
+            self = cls(x, y, tiles[-1], tiles[-1])
             global palettes
             palettes = [Palette(fd.read(8)) for i in range(8)]
             self.tiles = [Tile.from_bytes(fd.read(1), tiles) for i in range(total_size)]
@@ -132,7 +152,7 @@ def main(args):
     else:
         if args.x is None or args.y is None:
             raise Exception("Invalid Usage: ./main.py sprite_folder -x [x] -y [y]")
-        game_map = Map(args.x, args.y, sprites[9])
+        game_map = Map(args.x, args.y, sprites[9], sprites[-2])
 
     pygame.init()
     window_surface = pygame.display.set_mode((game_map.size_x * 8, game_map.size_y * 8), flags=pygame.RESIZABLE)
@@ -141,8 +161,8 @@ def main(args):
     for i in range(game_map.size_x):
         for j in range(game_map.size_y):
                 surface.blit(game_map[i, j].pyg_image, (i * 8, j * 8))
-
     selected = 0
+    pygame.draw.rect(surface, 0x00FF00, pygame.Rect(game_map.spawn[0] * 8, game_map.spawn[1] * 8, 8, 8))
 
     while True:
         for event in pygame.event.get():
@@ -162,12 +182,18 @@ def main(args):
                 ...
                 window_surface = pygame.display.set_mode((event.w, event.h),pygame.RESIZABLE)
 
-            if event.type == pygame.MOUSEBUTTONUP:
+            if event.type == pygame.MOUSEBUTTONDOWN:
                 clickx, clicky = pygame.mouse.get_pos()
                 real_x = int(clickx / window_surface.get_size()[0] * game_map.size_x)
                 real_y = int(clicky / window_surface.get_size()[1] * game_map.size_y)
-                game_map[real_x, real_y] = sprites[selected]
-                surface.blit(sprites[selected].pyg_image, (real_x * 8, real_y * 8))
+                if pygame.mouse.get_pressed()[0]:
+                    game_map[real_x, real_y] = sprites[selected]
+                    surface.blit(sprites[selected].pyg_image, (real_x * 8, real_y * 8))
+                if pygame.mouse.get_pressed()[2]:
+                    surface.blit(game_map[game_map.spawn[0], game_map.spawn[1]].pyg_image, (game_map.spawn[0] * 8, game_map.spawn[1] * 8))
+                    game_map.spawn = (real_x, real_y)
+                    pygame.draw.rect(surface, 0x00FF00, pygame.Rect(game_map.spawn[0] * 8, game_map.spawn[1] * 8, 8, 8))
+
 
         pygame.transform.scale(surface, window_surface.get_size(), window_surface)
         pygame.display.flip()
