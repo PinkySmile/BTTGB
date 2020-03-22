@@ -22,7 +22,7 @@ main::
 	jp intro
 
 mainMenu::
-    ld de, menuChannelOne
+	ld de, menuChannelOne
 	ld hl, MUSIC_CHANNEL_1
 	call playMusic
 	ld de, menuChannelTwo
