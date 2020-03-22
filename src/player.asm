@@ -93,18 +93,18 @@ executePlayerActions::
 	ld b, a
 	bit 2, b
 	call z, .up
-	push bc
+	bit 4, b
+	call z, .a
 
 	call getKeys
 	ld b, a
+	push bc
 	bit 0, b
 	call z, .right
 	bit 1, b
 	call z, .left
 	bit 3, b
 	call z, .down
-	bit 5, b
-	call z, .b
 	bit 6, b
 	call z, .select
 	bit 7, b
@@ -112,8 +112,8 @@ executePlayerActions::
 
 	call movePlayer
 	pop bc
-	bit 4, b
-	call z, .a
+	bit 5, b
+	call z, .b
 	ret
 .start::
 	ret
@@ -181,19 +181,28 @@ executePlayerActions::
 
 	ld a, [hl]
 	or a
-	ret nz ; Check if the tile is a target
+;	jr z, .b_ok ; Check if the tile is a target
 
+;	inc hl
+;	ld a, [hl]
+;	or a
+	ret nz
+
+;.b_ok:
 	call random
 	and %11
-	push hl
+	ld b, h
+	ld c, l
 
 	ld h, 0
 	ld l, a
 	ld de, MAP + MAP_TAGS_OFF
 	add hl, de
 	ld a, [hl]
+	push af
 
-	pop hl
+	ld h, b
+	ld l, c
 	ld [hl], a ; Change the tile in the ram.
 
 	ld hl, STAT_CONTROL
@@ -227,6 +236,7 @@ executePlayerActions::
 	and $9B
 	ld h, a
 
+	pop af
 	push af
 	and a, TILE_TEXTURE ; a now contails the texture id
 	ld [hl], a
@@ -562,6 +572,8 @@ collideUp::
 .ok:
 	ld a, [PLAYER_STRUCT + BASIC_OBJECT_STRUCT_Y_SPEED_OFF]
 	bit 7, a ; bit clear the carry flag
+	ret z
+	and %00001111
 	ret z
 
 	scf ; set the carry flag
