@@ -138,8 +138,8 @@ executePlayerActions::
 
 .left::
 	ld hl, PLAYER_STRUCT + DISPLAYABLE_OBJECT_STRUCT_ORIENTATION
-    ld a, %0000
-    ld [hl], a
+	ld a, %0000
+	ld [hl], a
 
 	ld hl, PLAYER_STRUCT + BASIC_OBJECT_STRUCT_X_SPEED_OFF
 
@@ -234,17 +234,16 @@ collidedBelow::
 	ret
 
 collidedUp::
-	;ld b, b
 	ld hl, PLAYER_STRUCT + BASIC_OBJECT_STRUCT_Y_SPEED_OFF
-    inc [hl]
-   	ret
+	inc [hl]
+	ret
 
 moveY::
-    ;check collisions on Y
+	;check collisions on Y
 	call collideBelow
 	jr c, collidedBelow
-	;call collideUp
-    ;jr c, collidedUp
+	call collideUp
+	jr c, collidedUp
 
 	ld a, [PLAYER_STRUCT + BASIC_OBJECT_STRUCT_Y_SPEED_OFF]
 	or a
@@ -348,7 +347,6 @@ collideLeft::
 	ld a, [PLAYER_STRUCT + BASIC_OBJECT_STRUCT_X_SPEED_OFF]
 	bit 7, a ; bit clear the carry flag
 	ret z
-	ld b, a
 
 	scf ; set the carry flag
 	ret
@@ -392,7 +390,6 @@ collideRight::
 	ret nz
 	or a ; or clear the carry flag
 	ret z
-	ld b, a
 
 	scf ; set the carry flag
 	ret
@@ -437,14 +434,12 @@ collideBelow::
 	and TILE_IS_SOLID
 	ret z
 
-	; Do not check collisions if the player moves to the right.
 .ok:
 	ld a, [PLAYER_STRUCT + BASIC_OBJECT_STRUCT_Y_SPEED_OFF]
 	bit 7, a ; bit clear the carry flag
 	ret nz
 	or a
 	ret z
-	ld b, a
 
 	scf ; set the carry flag
 	ret
@@ -465,26 +460,25 @@ collideUp::
 	ld a, [MAP_PTR_L]
 	ld e, a ;Get the top left tile of the player
 
-	; Check for the lower half of the body.
-	ld a, [MAP + MAP_SIZE_X_OFF]
-	ld h, 0
-	ld l, a
-	add hl, de
-	ld a, [hl]
+	ld a, [SCROLL_X]
+	and 7
+	cp 7
+	jr nz, .skipOffsetX
+	inc de
+.skipOffsetX:
+	ld a, [de]
 	and TILE_IS_SOLID ; and clear the carry flag.
 	jr nz, .ok
 
-	inc hl
-	ld a, [hl]
+	inc de
+	ld a, [de]
 	and TILE_IS_SOLID
 	ret z
 
-	; Do not check collisions if the player moves to the right.
 .ok:
 	ld a, [PLAYER_STRUCT + BASIC_OBJECT_STRUCT_Y_SPEED_OFF]
 	bit 7, a ; bit clear the carry flag
-	ret nz
-	ld b, a
+	ret z
 
 	scf ; set the carry flag
 	ret
