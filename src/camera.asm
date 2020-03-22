@@ -1,3 +1,88 @@
+updateCameras::
+	ld hl, SCROLL_Y
+	ld a, [hli]
+	ld e, a
+	ld a, [hli]
+	ld d, a
+
+	ld hl, OLD_SCROLL_X
+	ld a, [hl]
+	ld b, a
+	ld a, d
+	ld [hli], a
+
+	ld a, [hl]
+	ld c, a
+	ld a, e
+	ld [hli], a
+
+	ld h, d
+	ld l, e
+
+	ld a, [PLAYER_STRUCT + BASIC_OBJECT_STRUCT_X_SPEED_OFF]
+	push af
+	or a
+	jr z, .noUpdateX
+
+	ld b, b
+	bit 7, a
+	jr nz, .negX
+
+	ld a, b
+	and 7
+	ld b, a
+	ld a, h
+	and 7
+	cp b
+	jr nc, .noUpdateX
+	jr .updateX
+
+.negX:
+	ld a, h
+	and 7
+	ld h, a
+	ld a, b
+	and 7
+	cp h
+	jr nc, .noUpdateX
+.updateX:
+	pop de
+	jp updateCameraH
+
+.noUpdateX:
+	pop af
+	ld a, [PLAYER_STRUCT + BASIC_OBJECT_STRUCT_Y_SPEED_OFF]
+	push af
+	or a
+	jr z, .noUpdateY
+
+	bit 7, a
+	jr nz, .negY
+
+	ld a, c
+	and 7
+	ld c, a
+	ld a, l
+	and 7
+	cp c
+	jr nc, .noUpdateY
+	jr .updateY
+
+.negY:
+	ld a, l
+	and 7
+	ld l, a
+	ld a, c
+	and 7
+	cp l
+	jr nc, .noUpdateY
+.updateY:
+	pop de
+	jp updateCameraV
+.noUpdateY:
+	pop af
+	ret
+
 updateCameraH::
 	or d
 	ret z

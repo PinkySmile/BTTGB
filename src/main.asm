@@ -176,6 +176,7 @@ run::
 	reset INTERRUPT_REQUEST
 	halt
 	call displayTimer
+	call updateCameras
 	call updateGravity
 	call updatePlayer
 	call updateAnimation

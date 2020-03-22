@@ -178,7 +178,9 @@ loadMap::
 	call setGBCPalette
 
 	reg SCROLL_X, $8
-	reg SCROLL_Y, $8
+	ld [SCROLL_Y], a
+	ld [OLD_SCROLL_X], a
+	ld [OLD_SCROLL_Y], a
 
 	ld de, VRAM_BG_START
 	ld b, 20
