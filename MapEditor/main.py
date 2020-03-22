@@ -30,7 +30,7 @@ class Tile:
         self.file_name = file
         self.name_no_ex = file.split('.', 1)[0]
         self.pal_file_name = self.name_no_ex + '.pal'
-        self.name = self.name_no_ex.rsplit('/', 1)[1]
+        self.name = self.name_no_ex.replace("\\", "/").rsplit('/', 1)[1]
         match = FILE_REGEX.match(self.name)
         if not match:
             raise Exception(f"File named \"{self.name}\" must match regular expression {FILE_REGEX.pattern}")
