@@ -185,15 +185,18 @@ executePlayerActions::
 
 	call random
 	and %11
-	push hl
+	ld b, h
+	ld c, l
 
 	ld h, 0
 	ld l, a
 	ld de, MAP + MAP_TAGS_OFF
 	add hl, de
 	ld a, [hl]
+	push af
 
-	pop hl
+	ld h, b
+	ld l, c
 	ld [hl], a ; Change the tile in the ram.
 
 	ld hl, STAT_CONTROL
@@ -227,6 +230,7 @@ executePlayerActions::
 	and $9B
 	ld h, a
 
+	pop af
 	push af
 	and a, TILE_TEXTURE ; a now contails the texture id
 	ld [hl], a
