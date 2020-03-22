@@ -183,7 +183,6 @@ tag::
 	cp (allMapsEnd - allMaps) / 3
 	jp z, endGame
 
-	ld b, b
 	ld d, a
 	rla
 	res 0, a

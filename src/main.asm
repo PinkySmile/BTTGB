@@ -183,9 +183,6 @@ run::
 	ld a, [de]
 	call loadMap
 
-	ld hl, MAP + MAP_NB_TARGETS_OFF
-	dec [hl]
-
 	xor a
 	ld [CURRENTLY_LOADED_MAP], a
 	ld hl, playerPal
