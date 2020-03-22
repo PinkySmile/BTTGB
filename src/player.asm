@@ -579,10 +579,13 @@ collideUp::
 	ret z
 
 .ok:
+	; check if it is a one way
+	ld a, [de]
+	and %00001111
+	ret z
+
 	ld a, [PLAYER_STRUCT + BASIC_OBJECT_STRUCT_Y_SPEED_OFF]
 	bit 7, a ; bit clear the carry flag
-	ret z
-	and %00001111
 	ret z
 
 	scf ; set the carry flag
