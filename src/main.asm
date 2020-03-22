@@ -40,10 +40,9 @@ mainMenu::
 
 	ld hl, LogoPal
 	ld a, $8
-	ld bc, $8
+	ld bc, $10
 	ld e, BGPI & $FF
 	call setGBCPalette
-
 
 	ld hl, MenuLogo
 	ld bc, MenuLogoEnd - MenuLogo
@@ -64,12 +63,22 @@ mainMenu::
 	ld bc, $400
 	xor a
 	call fillMemory
-	ld [VRAM_BANK_SELECT], a
+
+	ld a, 2
+	ld de, $9984
+	ld bc, pressStartEnd - pressStart
+	call fillMemory
+	reset VRAM_BANK_SELECT
 
 	ld de, OAM_SRC_START
 	ld bc, $A0
 	xor a
 	call fillMemory
+
+	ld hl, pressStart
+	ld bc, pressStartEnd - pressStart
+	ld de, $9984
+	call copyMemory
 
 	ld hl, VRAM_BG_START + $20 + 6
 	ld b, 8
@@ -183,6 +192,7 @@ run::
 	reset INTERRUPT_REQUEST
 	halt
 	call displayTimer
+	call updateCameras
 	call updateGravity
 	call updatePlayer
 	call updateAnimation
