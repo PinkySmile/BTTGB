@@ -24,7 +24,6 @@ updateCameras::
 	or a
 	jr z, .noUpdateX
 
-	ld b, b
 	bit 7, a
 	jr nz, .negX
 

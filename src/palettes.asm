@@ -9,3 +9,6 @@ DMGPal::
 
 LogoPal::
 	incbin "assets/menu/logo.pal"
+
+DMGPalInverted::
+	dw $0000, $5294, $294A, $7FFF
