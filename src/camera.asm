@@ -81,8 +81,6 @@ updateCameraH::
 
       	dec b
       	jr nz, .changeLoopRight
-
-      	ld b, b
 	ret
 
 .left:
