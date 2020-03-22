@@ -45,7 +45,6 @@ updatePlayer::
 	ld hl, PLAYER_STRUCT + BASIC_OBJECT_STRUCT_X_SPEED_OFF
 	ld [hl], 0
 
-
 	ld hl, OAM_SRC_START
 	ld d, h
 	ld e, l

@@ -154,8 +154,14 @@ run::
 	call waitVBLANK
 	reset LCD_CONTROL
 
-	ld [WX], a
-	reg WY, $90
+	reg WY, $88
+	reg WX, $68
+	ld hl, $9C02
+	ld a, ":"
+	ld [hli], a
+	inc hl
+	inc hl
+	ld [hl], a
 
 	ld de, VRAM_START
 	ld hl, GameSprites
@@ -183,6 +189,7 @@ run::
 	ld e, OBPI & $FF
 	ld bc, 8
 	call setGBCPalette
+
 	reg LCD_CONTROL, LCD_BASE_CONTROL
 
 	call initGravity
