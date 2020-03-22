@@ -8,6 +8,17 @@ copyMap::
 	adc $00
 	ld b, a
 
+	inc hl
+	inc hl
+	inc hl
+	inc hl
+	inc hl
+	inc hl
+	inc hl
+	inc hl
+	inc hl
+	inc hl
+
 	call copyMemory
 
 ; Copies a map column
@@ -84,12 +95,25 @@ copyMapColumn::
 ;    de -> Not preserved
 ;    hl -> Not preserved
 loadMap::
+	push hl
 	ld [ROM_BANK_SWITCH], a
 	call waitVBLANK
 	reset LCD_CONTROL
 
 	ld de, MAP
 	call copyMap
+
+	pop de
+	inc de
+	inc de
+
+	ld hl, MAP_PTR_H
+	ld a, [de]
+	ld [hli], a
+	inc de
+	ld a, [de]
+	ld [hl], a
+	inc de ;MAP_PTR_L
 
 	ld hl, BOTTOM_LEFT_VRAM_START_L
 
@@ -99,48 +123,12 @@ loadMap::
 	ld a, MAP_VRAM_START_BOTTOM_LEFT >> 8
 	ld [hli], a ; BOTTOM_LEFT_VRAM_START_H
 
-	push hl
-	ld a, [MAP + MAP_SIZE_X_OFF]
-	ld h, a
-	ld b, 0
-	ld c, a
-
-	rl c
-	rl b
-	rl c
-	rl b
-
-	ld d, b
-	ld e, c
-
-	rl e
-	rl d
-	rl e
-	rl d
-
-	ld a, c
-	add e
-	ld c, a
-
-	ld a, b
-	adc d
-	ld b, a
-
-	ld a, c
-	sub h
-	ld c, a
-
-	ld a, b
-	sbc $00
-	ld b, a
-
-	pop hl
-	ld a, c
-	add (MAP + MAP_TILES_OFF) & $FF
+	ld a, [de]
+	inc de
 	ld [hli], a ; BOTTOM_LEFT_MAP_START_L
 
-	ld a, b
-	adc (MAP + MAP_TILES_OFF) >> 8
+	ld a, [de]
+	inc de
 	ld [hli], a ; BOTTOM_LEFT_MAP_START_H
 
 
@@ -149,12 +137,11 @@ loadMap::
 	ld a, MAP_VRAM_START_TOP_RIGHT >> 8
 	ld [hli], a ; TOP_RIGHT_VRAM_START_H
 
-	ld a, 21
-	add (MAP + MAP_TILES_OFF) & $FF
+	ld a, [de]
+	inc de
 	ld [hli], a ; TOP_RIGHT_MAP_START_L
-
-	ld a, 0
-	adc (MAP + MAP_TILES_OFF) >> 8
+	ld a, [de]
+	inc de
 	ld [hli], a ; TOP_RIGHT_MAP_START_H
 
 
@@ -162,9 +149,12 @@ loadMap::
 	ld [hli], a ; LEFT_LEFT_VRAM_START_L
 	ld a, MAP_VRAM_START_LEFT_LEFT >> 8
 	ld [hli], a ; LEFT_LEFT_VRAM_START_H
-	ld a, MAP_MAP_START_LEFT_LEFT & $FF
+
+	ld a, [de]
+	inc de
 	ld [hli], a ; LEFT_LEFT_MAP_START_L
-	ld a, MAP_MAP_START_LEFT_LEFT >> 8
+	ld a, [de]
+	inc de
 	ld [hli], a ; LEFT_LEFT_MAP_START_H
 
 
@@ -173,14 +163,11 @@ loadMap::
 	ld a, MAP_VRAM_START_TOP_LEFT >> 8
 	ld [hli], a ; TOP_LEFT_VRAM_START_H
 
-	ld a, [MAP + MAP_SIZE_X_OFF]
-	ld b, a
-	ld a, (MAP + MAP_TILES_OFF) & $FF
-	sub b
+	ld a, [de]
+	inc de
 	ld [hli], a ; TOP_LEFT_MAP_START_L
-
-	ld a, (MAP + MAP_TILES_OFF) >> 8
-	sbc 0
+	ld a, [de]
+	inc de
 	ld [hli], a ; TOP_LEFT_MAP_START_H
 
 
@@ -193,19 +180,13 @@ loadMap::
 	reg SCROLL_X, $8
 	reg SCROLL_Y, $8
 
-	ld a, [MAP + MAP_SIZE_X_OFF]
-	inc a
-
-	ld d, a
-	ld a, l
-	sub d
-	ld l, a
-	ld a, h
-	sbc $0
-	ld h, a
-
 	ld de, VRAM_BG_START
 	ld b, 20
+	ld a, [TOP_LEFT_MAP_START_H]
+	ld h, a
+	ld a, [TOP_LEFT_MAP_START_L]
+	ld l, a
+	dec hl
 .loop:
 	ld c, 22
 .copyLoop:
