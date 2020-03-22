@@ -62,25 +62,25 @@ updateCameraH::
 	ld b, 4
 
 .changeLoopRight:
-      	ld a, [hl]
-      	add $1
-      	ld [hli], a
+	ld a, [hl]
+	add $1
+	ld [hli], a
 
-      	ld a, [hl]
-      	adc $0
-      	and $9B
-      	ld [hli], a
+	ld a, [hl]
+	adc $0
+	and $9B
+	ld [hli], a
 
-      	ld a, [hl]
-      	add $1
-      	ld [hli], a
+	ld a, [hl]
+	add $1
+	ld [hli], a
 
-      	ld a, [hl]
-      	adc $0
-      	ld [hli], a
+	ld a, [hl]
+	adc $0
+	ld [hli], a
 
-      	dec b
-      	jr nz, .changeLoopRight
+	dec b
+	jr nz, .changeLoopRight
 	ret
 
 .left:
@@ -142,26 +142,26 @@ updateCameraH::
 	ld c, a
 
 .changeLoopLeft:
-      	ld a, [hl]
-      	sub $1
-      	ld [hli], a
+	ld a, [hl]
+	sub $1
+	ld [hli], a
 
-      	ld a, [hl]
-      	sbc $0
-      	or $98
-      	and $9B
-      	ld [hli], a
+	ld a, [hl]
+	sbc $0
+	or $98
+	and $9B
+	ld [hli], a
 
-      	ld a, [hl]
-      	sub $1
-      	ld [hli], a
+	ld a, [hl]
+	sub $1
+	ld [hli], a
 
-      	ld a, [hl]
-      	sbc $0
-      	ld [hli], a
+	ld a, [hl]
+	sbc $0
+	ld [hli], a
 
-      	dec b
-      	jr nz, .changeLoopLeft
+	dec b
+	jr nz, .changeLoopLeft
 	ret
 
 
@@ -226,25 +226,25 @@ updateCameraV::
 	ld c, a
 
 .changeLoopDown:
-      	ld a, [hl]
-      	add $20
-      	ld [hli], a
+	ld a, [hl]
+	add $20
+	ld [hli], a
 
-      	ld a, [hl]
-      	adc $0
-      	and $9B
-      	ld [hli], a
+	ld a, [hl]
+	adc $0
+	and $9B
+	ld [hli], a
 
-      	ld a, [hl]
-      	add c
-      	ld [hli], a
+	ld a, [hl]
+	add c
+	ld [hli], a
 
-      	ld a, [hl]
-      	adc $0
-      	ld [hli], a
+	ld a, [hl]
+	adc $0
+	ld [hli], a
 
-      	dec b
-      	jr nz, .changeLoopDown
+	dec b
+	jr nz, .changeLoopDown
 	ret
 
 
@@ -310,7 +310,7 @@ updateCameraV::
 
 	ld a, [hl]
 	sbc $0
-      	or $98
+		or $98
 	and $9B
 	ld [hli], a
 
@@ -370,24 +370,24 @@ updateCameraV::
 ;	jr nz, .loop
 ;	ret
 ;
-;getCamPos::
-;	ld h, VRAM_BG_START >> 8
-;	ld a, [SCROLL_X]
-;	rra
-;	rra
-;	rra
-;	and %00011111
-;	ld l, a
-;
-;	ld a, [SCROLL_Y]
-;	and %11111000
-;	ld b, 0
-;	ld c, a
-;
-;	rl b
-;	rl c
-;	rl b
-;	rl c
-;
-;	add hl, bc
-;	ret
+getCamPos::
+	ld h, VRAM_BG_START >> 8
+	ld a, [SCROLL_X]
+	rra
+	rra
+	rra
+	and %00011111
+	ld l, a
+
+	ld a, [SCROLL_Y]
+	and %11111000
+	ld b, 0
+	ld c, a
+
+	rl c
+	rl b
+	rl c
+	rl b
+
+	add hl, bc
+	ret
