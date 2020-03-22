@@ -28,6 +28,9 @@ mainMenu::
 	ld de, menuChannelTwo
 	ld hl, MUSIC_CHANNEL_2
 	call playMusic
+	ld de, menuChannelThree
+	ld hl, MUSIC_CHANNEL_WAVE
+	call playMusic
 
 	ld de, OAM_SRC_START
 	ld bc, $A0
@@ -139,3 +142,4 @@ include "src/btt_channel_four.asm"
 include "src/player_animation.asm"
 include "src/menu_channel_one.asm"
 include "src/menu_channel_two.asm"
+include "src/menu_channel_three.asm"

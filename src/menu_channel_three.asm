@@ -393,7 +393,7 @@ menuChannelThree::
 ;mesure 48
     db $80, $00, $40, $D5, $81, MQUAVER * 8 ; MIB
 ;mesure 49
-    db $80, $00, $40, $94, $80, MQUAVER * 8 ; DO#B
+    db $80, $00, $40, $20, $80, MQUAVER * 8 ; DOB
     db $80, $00, $40, $D5, $81, MQUAVER * 2 ; MIB
     db $80, $00, $40, $D5, $81, MQUAVER / 3 * 2 ; MIB
     db $80, $00, $40, $D5, $81, MQUAVER / 3 * 2 ; MIB
@@ -420,3 +420,5 @@ menuChannelThree::
 ;mesure 55 - 56
     db $80, $00, $40, $51, $84, MQUAVER * 8 ; DO#0
     db $80, $00, $40, $B8, $81, MQUAVER / 3 * 4 ; RE#0
+    db $80, $00, $40, $B8, $81, MQUAVER / 3 * 8 ; NO SOUND
+    db $80, $00, $00, $B8, $81, $FF ; RE#0
