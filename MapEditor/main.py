@@ -19,6 +19,7 @@ palettes = []
 class Tile:
 
     def __init__(self, file):
+        print(file)
         global palettes
         with open(file, 'rb') as fd:
             img = Image.open(fd)
@@ -122,7 +123,7 @@ class Map:
 
 
 def main(args):
-    sprites = [Tile(f"{args.sprite_folder}/{i}") for i in sorted(os.listdir(args.sprite_folder)) if i.endswith('.png')]
+    sprites = [Tile(f"{os.path.abspath(i)}") for i in sorted(os.listdir(args.sprite_folder)) if i.endswith('.png')]
     #if len(sprites) != palettes:
     #    raise Exception(f"You must have the same number of sprites and palettes, found {sprites} sprites and {palettes} palettes")
 
@@ -130,7 +131,7 @@ def main(args):
         game_map = Map.load(args.load, sprites)
     else:
         if args.x is None or args.y is None:
-            Exception("Invalid Usage: ./main.py sprite_folder -x [x] -y [y]")
+            raise Exception("Invalid Usage: ./main.py sprite_folder -x [x] -y [y]")
         game_map = Map(args.x, args.y, sprites[-1])
 
     pygame.init()
