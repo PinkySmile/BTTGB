@@ -240,8 +240,8 @@ moveY::
     ;check collisions on Y
 	call collideBelow
 	jr c, collidedBelow
-	call collideUp
-    jr c, collidedUp
+	;call collideUp
+    ;jr c, collidedUp
 
 	ld a, [PLAYER_STRUCT + BASIC_OBJECT_STRUCT_Y_SPEED_OFF]
 	or a
