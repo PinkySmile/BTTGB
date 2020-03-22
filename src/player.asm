@@ -431,13 +431,14 @@ movePlayer::
 	add d
 	ld [hld], a
 
-	ret nz
 	bit 7, d
 	jr nz, .underflow
+	ret nc
 	inc [hl]
 	ret
 
 .underflow:
+	ret c
 	dec [hl]
 	ret
 
