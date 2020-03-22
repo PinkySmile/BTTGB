@@ -327,7 +327,7 @@ moveY::
 	ret z
 	ld d, a
 	ld b, a
-	ld a, [MAP + MAP_SIZE_Y_OFF]
+	ld a, [MAP + MAP_SIZE_X_OFF]
 	ld e, a
 
 	ld hl, SCROLL_Y
