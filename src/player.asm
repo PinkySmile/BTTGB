@@ -67,6 +67,9 @@ initPlayers::
 ;    de -> Not preserved
 ;    hl -> Not preserved
 updatePlayer::
+	ld hl, PLAYER_STRUCT + BASIC_OBJECT_STRUCT_X_SPEED_OFF
+	ld [hl], 0
+
 	call executePlayerActions
 
 	ld hl, OAM_SRC_START
@@ -418,6 +421,13 @@ collideBelow::
 	ld l, a
 	add hl, bc
 	add hl, de
+
+	ld a, [SCROLL_X]
+	and 7
+	cp 7
+	jr nz, .skipOffsetX
+	inc hl
+.skipOffsetX:
 	ld a, [hl]
 	and TILE_IS_SOLID ; and clear the carry flag.
 	jr nz, .ok
