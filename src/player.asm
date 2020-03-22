@@ -31,6 +31,10 @@ initPlayers::
 	ld [hli], a ; DISPLAYABLE_OBJECT_STRUCT_ORIENTATION
 	ret
 
+endGame::
+	ld sp, $E000
+	jp mainMenu
+
 ; Update the player.
 ; Params:
 ;    None
@@ -170,7 +174,38 @@ tag::
 
 	ld hl, MAP + MAP_NB_TARGETS_OFF
 	dec [hl]
+	jr nz, .notEnd
 
+	ld hl, CURRENTLY_LOADED_MAP
+	ld a, [hl]
+	inc a
+	ld [hl], a
+	cp (allMapsEnd - allMaps) / 3
+	jp z, endGame
+
+	ld b, b
+	ld d, a
+	rla
+	res 0, a
+	add d
+	add allMaps & $FF
+	ld e, a
+	ld a, allMaps >> 8
+	adc $0
+	ld d, a
+
+	ld a, [de]
+	ld l, a
+	inc de
+	ld a, [de]
+	ld h, a
+	inc de
+	ld a, [de]
+	call loadMap
+	reg LCD_CONTROL, LCD_BASE_CONTROL
+	ret
+
+.notEnd:
 	ld h, 0
 	ld l, a
 	push de
@@ -236,7 +271,7 @@ tag::
 	reset VRAM_BANK_SELECT
 
 	reg PLAYER_STRUCT + DISPLAYABLE_OBJECT_STRUCT_SPRITE, PLAYER_SPRITE_PAINT_NBR
-    call initPaintAnimation
+	call initPaintAnimation
 
 	ret
 
