@@ -29,31 +29,6 @@ initPlayers::
 	ld [hli], a ; DISPLAYABLE_OBJECT_STRUCT_SPRITE
 	ld a, %0001
 	ld [hli], a ; DISPLAYABLE_OBJECT_STRUCT_ORIENTATION
-
-	; Init the MAP_PTR.
-	ld a, [MAP + MAP_SIZE_X_OFF]
-	ld c, a
-	ld b, 0
-	rl c
-	rl b
-	rl c
-	rl b
-	rl c
-	rl b
-
-	ld h, MAP >> 8
-	ld l, MAP & $FF + MAP_TILES_OFF
-	add hl, bc
-	ld b, 0
-	ld c, PLAYER_POSITION_X / 8
-	add hl, bc
-	push hl
-	pop bc
-
-	ld hl, MAP_PTR_H
-	ld [hl], b
-	inc hl
-	ld [hl], c
 	ret
 
 ; Update the player.
@@ -260,6 +235,9 @@ tag::
 	rra ; a now contails the palette id
 	ld [hl], a
 	reset VRAM_BANK_SELECT
+
+	reg PLAYER_STRUCT + DISPLAYABLE_OBJECT_STRUCT_SPRITE, PLAYER_SPRITE_PAINT_NBR
+    call initPaintAnimation
 
 	ret
 

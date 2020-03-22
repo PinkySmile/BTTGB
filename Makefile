@@ -65,6 +65,8 @@ COLORED_IMGS = \
 	assets/player/player_walk/player_walk3.png \
 	assets/player/player_walk/player_walk4.png \
 	assets/player/player_jump/player_jump.png \
+	assets/player/player_tag/player_tag1.png \
+	assets/player/player_tag/player_tag2.png \
 
 COLORED_IMGS_FX = $(COLORED_IMGS:%.png=%.cfx)
 

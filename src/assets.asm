@@ -65,6 +65,9 @@ PlayerSprites::
 	incbin "assets/player/player_walk/player_walk4.cfx"
 
 	incbin "assets/player/player_jump/player_jump.cfx"
+
+	incbin "assets/player/player_tag/player_tag1.cfx"
+	incbin "assets/player/player_tag/player_tag2.cfx"
 PlayerSpritesEnd::
 
 MenuLogo::
