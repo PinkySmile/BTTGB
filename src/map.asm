@@ -99,7 +99,9 @@ loadMap::
 	ld a, MAP_VRAM_START_BOTTOM_LEFT >> 8
 	ld [hli], a ; BOTTOM_LEFT_VRAM_START_H
 
+	push hl
 	ld a, [MAP + MAP_SIZE_X_OFF]
+	ld h, a
 	ld b, 0
 	ld c, a
 
@@ -124,6 +126,15 @@ loadMap::
 	adc d
 	ld b, a
 
+	ld a, c
+	sub h
+	ld c, a
+
+	ld a, b
+	sbc $00
+	ld b, a
+
+	pop hl
 	ld a, c
 	add (MAP + MAP_SIZE_TILES_OFF) & $FF
 	ld [hli], a ; BOTTOM_LEFT_MAP_START_L
