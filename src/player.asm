@@ -166,7 +166,6 @@ tag::
 .ok:
 	call random
 	and %11
-
 	ld b, h
 	ld c, l
 
@@ -178,7 +177,6 @@ tag::
 	push de
 	ld de, MAP + MAP_TAGS_OFF
 	add hl, de
-	ld b, b
 	pop de
 	ld a, [hl]
 	push af
@@ -288,11 +286,7 @@ movePlayer::
 	and 7
 	ret nz
 .endNegX:
-
 	pop hl
-	push de
-	call updateCameraH
-	pop de
 
 	; Move the map ptr (position of the player on the map)
 	ld hl, MAP_PTR_L
@@ -357,7 +351,6 @@ moveY::
 	and 7
 	cp c
 	ret nc
-	push de
 
 	; Move the map ptr (position of the player on the map)
 .loopPos:
@@ -365,9 +358,9 @@ moveY::
 	ld a, [hl]
 	add e
 	ld [hld], a
-	jr nc, .updateCamera
+	ret nc
 	inc [hl]
-	jr .updateCamera
+	ret
 
 .neg::
 	pop af
@@ -379,7 +372,6 @@ moveY::
 	and 7
 	cp c
 	ret nc
-	push de
 
 .loopNeg:
 	ld hl, MAP_PTR_L
@@ -387,12 +379,9 @@ moveY::
 	sub e
 	ld [hld], a
 
-	jr nc, .updateCamera
+	ret nc
 	dec [hl]
-
-.updateCamera:
-	pop de
-	jp updateCameraV
+	ret
 
 
 ; Check left collisions for the player.
