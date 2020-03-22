@@ -1,10 +1,10 @@
 SECTION "Maps", ROMX[$4000], BANK[2]
 
 MapTuto::
-	incbin "assets/room_map.map"
+	incbin "assets/tutorial"
 
-Map1::
-	incbin "assets/room_map.map"
+;Map1::
+;	incbin "assets/room_map.map"
 
 Map2::
 	incbin "assets/Map_Elden_1"
