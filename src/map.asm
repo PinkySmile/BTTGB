@@ -136,11 +136,11 @@ loadMap::
 
 	pop hl
 	ld a, c
-	add (MAP + MAP_SIZE_TILES_OFF) & $FF
+	add (MAP + MAP_TILES_OFF) & $FF
 	ld [hli], a ; BOTTOM_LEFT_MAP_START_L
 
 	ld a, b
-	adc (MAP + MAP_SIZE_TILES_OFF) >> 8
+	adc (MAP + MAP_TILES_OFF) >> 8
 	ld [hli], a ; BOTTOM_LEFT_MAP_START_H
 
 
@@ -150,11 +150,11 @@ loadMap::
 	ld [hli], a ; TOP_RIGHT_VRAM_START_H
 
 	ld a, 21
-	add (MAP + MAP_SIZE_TILES_OFF) & $FF
+	add (MAP + MAP_TILES_OFF) & $FF
 	ld [hli], a ; TOP_RIGHT_MAP_START_L
 
 	ld a, 0
-	adc (MAP + MAP_SIZE_TILES_OFF) >> 8
+	adc (MAP + MAP_TILES_OFF) >> 8
 	ld [hli], a ; TOP_RIGHT_MAP_START_H
 
 
@@ -175,16 +175,16 @@ loadMap::
 
 	ld a, [MAP + MAP_SIZE_X_OFF]
 	ld b, a
-	ld a, (MAP + MAP_SIZE_TILES_OFF) & $FF
+	ld a, (MAP + MAP_TILES_OFF) & $FF
 	sub b
 	ld [hli], a ; TOP_LEFT_MAP_START_L
 
-	ld a, (MAP + MAP_SIZE_TILES_OFF) >> 8
+	ld a, (MAP + MAP_TILES_OFF) >> 8
 	sbc 0
 	ld [hli], a ; TOP_LEFT_MAP_START_H
 
 
-	ld hl, MAP + MAP_SIZE_PAL_OFF
+	ld hl, MAP + MAP_PAL_OFF
 	ld bc, $40
 	ld a, 0
 	ld e, BGPI & $FF

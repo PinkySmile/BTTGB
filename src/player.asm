@@ -42,7 +42,7 @@ initPlayers::
 	rl b
 
 	ld h, MAP >> 8
-	ld l, MAP & $FF + MAP_SIZE_TILES_OFF
+	ld l, MAP & $FF + MAP_TILES_OFF
 	add hl, bc
 	ld b, 0
 	ld c, PLAYER_POSITION_X / 8

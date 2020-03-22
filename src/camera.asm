@@ -1,4 +1,6 @@
 updateCameraH::
+	or d
+	ret z
 	ld hl, VRAM_BG_START
 
 	bit 7, d
@@ -119,18 +121,17 @@ updateCameraH::
 	reset VRAM_BANK_SELECT
 
 	ld a, l
-	sub b
+	add b
 	ld l, a
 	ld a, h
-	sbc $0
+	adc $0
 	ld h, a
 
 	ld a, e
-	sub $20
+	add $20
 	ld e, a
 	ld a, d
-	sbc $00
-	or $98
+	adc $00
 	and $9B
 	ld d, a
 
