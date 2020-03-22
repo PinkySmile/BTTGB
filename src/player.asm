@@ -151,7 +151,7 @@ executePlayerActions::
 	call initGravity
 	ld hl, PLAYER_STRUCT + BASIC_OBJECT_STRUCT_Y_SPEED_OFF
 	ld [hl], -3
-	;ld[hl], -1
+;	ld [hl], -1
 	ret
 
 .down::
@@ -411,8 +411,11 @@ collideBelow::
 
 	; Check for the upper half of the body.
 	ld a, [MAP + MAP_SIZE_X_OFF]
+	ld b, 0
+	ld c, a
 	ld h, 0
 	ld l, a
+	add hl, bc
 	add hl, de
 	ld a, [hl]
 	and TILE_IS_SOLID ; and clear the carry flag.
