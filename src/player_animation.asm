@@ -12,6 +12,20 @@ initAnimation::
 	reg ANIMATION_TIMER, ANIMATION_TIME
 	ret
 
+; Initialize the painting animation timer.
+; Params:
+;    None
+; Return:
+;    None
+; Registers:
+;    af -> Not preserved
+;    bc -> Not preserved
+;    de -> Not preserved
+;    hl -> Not preserved
+initPaintAnimation::
+	reg ANIMATION_TIMER, PAINTING_TIME
+	ret
+
 ; Update animations.
 ; Params:
 ;    None
@@ -29,6 +43,15 @@ updateAnimation::
 	jr nz, .notReady
 
 	ld hl, PLAYER_STRUCT + DISPLAYABLE_OBJECT_STRUCT_SPRITE
+    ld a, PLAYER_SPRITE_PAINT_NBR
+    cp [hl]
+    jr z, playerAnimationPaint
+	ld hl, PLAYER_STRUCT + DISPLAYABLE_OBJECT_STRUCT_SPRITE
+    ld a, PLAYER_SPRITE_PAINT_NBR + 4
+    cp [hl]
+    jr z, endPlayerAnimationPaint
+
+	ld hl, PLAYER_STRUCT + DISPLAYABLE_OBJECT_STRUCT_SPRITE
 	inc [hl]
 	inc [hl]
 	inc [hl]
@@ -38,6 +61,7 @@ updateAnimation::
 
 .notReady::
 	dec [hl]
+	ret
 
 .end:
 	xor a
@@ -61,7 +85,6 @@ updateAnimation::
 
 .jump:
 	jp playerAnimationJump
-
 
 ; Animate player.
 ; Params:
@@ -104,3 +127,22 @@ playerAnimation::
 playerAnimationJump::
 	reg PLAYER_STRUCT + DISPLAYABLE_OBJECT_STRUCT_SPRITE, PLAYER_SPRITE_JUMP_NBR
 	ret
+
+; Animate player paint.
+; Params:
+;    None
+; Return:
+;    None
+; Registers:
+;    af -> Not preserved
+;    bc -> Not preserved
+;    de -> Not preserved
+;    hl -> Not preserved
+playerAnimationPaint::
+	reg PLAYER_STRUCT + DISPLAYABLE_OBJECT_STRUCT_SPRITE, PLAYER_SPRITE_PAINT_NBR + 4
+	call initPaintAnimation
+	ret
+
+endPlayerAnimationPaint:
+	reg PLAYER_STRUCT + DISPLAYABLE_OBJECT_STRUCT_SPRITE, PLAYER_SPRITE_NBR
+   	ret

@@ -236,6 +236,9 @@ tag::
 	ld [hl], a
 	reset VRAM_BANK_SELECT
 
+	reg PLAYER_STRUCT + DISPLAYABLE_OBJECT_STRUCT_SPRITE, PLAYER_SPRITE_PAINT_NBR
+    call initPaintAnimation
+
 	ret
 
 
