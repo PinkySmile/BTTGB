@@ -178,17 +178,20 @@ executePlayerActions::
 	ld h, a
 	ld a, [MAP_PTR_L]
 	ld l, a
+	ld d, 0
+	ld e, 0
 
 	ld a, [hl]
 	or a
-;	jr z, .b_ok ; Check if the tile is a target
+	jr z, .b_ok ; Check if the tile is a target
 
-;	inc hl
-;	ld a, [hl]
-;	or a
+	inc hl
+	ld a, [hl]
+	or a
 	ret nz
+	ld e, 1
 
-;.b_ok:
+.b_ok:
 	call random
 	and %11
 	ld b, h
@@ -196,8 +199,10 @@ executePlayerActions::
 
 	ld h, 0
 	ld l, a
+	push de
 	ld de, MAP + MAP_TAGS_OFF
 	add hl, de
+	pop de
 	ld a, [hl]
 	push af
 
@@ -218,6 +223,10 @@ executePlayerActions::
 	and %11100000
 	ld c, a
 	ld a, PLAYER_POSITION_X / 8
+	bit 0, e
+	jr z, .notRight
+	add 1
+.notRight:
 	add l
 	and %00011111
 	or c
