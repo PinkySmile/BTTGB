@@ -5,10 +5,167 @@ updateCameraH::
 	jr nz, .left
 
 .right:
+	ld hl, TOP_RIGHT_VRAM_START_L
+	ld a, [hli]
+	ld e, a
+	ld a, [hli]
+	ld d, a
+
+	ld a, [hli]
+	ld b, a
+	ld a, [hli]
+	ld h, a
+	ld l, b
+
+	ld c, 21
+	ld a, [MAP + MAP_SIZE_X_OFF]
+	ld b, a
+
+.loopRight:
+	ld a, [hl]
+	push af
+	and a, TILE_TEXTURE
+	ld [de], a
+
+	reg VRAM_BANK_SELECT, 1
+	pop af
+	and a, TILE_PALETTE
+	rra
+	rra
+	rra
+	rra
+	rra
+	ld [de], a
+	reset VRAM_BANK_SELECT
+
+	ld a, l
+	add b
+	ld l, a
+	ld a, h
+	adc $0
+	ld h, a
+
+	ld a, e
+	add $20
+	ld e, a
+	ld a, d
+	adc $00
+	and $9B
+	ld d, a
+
+	dec c
+	jr nz, .loopRight
+
+	ld hl, BOTTOM_LEFT_VRAM_START_L
+	ld b, 4
+
+.changeLoopRight:
+      	ld a, [hl]
+      	add $1
+      	ld [hli], a
+
+      	ld a, [hl]
+      	adc $0
+      	and $9B
+      	ld [hli], a
+
+      	ld a, [hl]
+      	add $1
+      	ld [hli], a
+
+      	ld a, [hl]
+      	adc $0
+      	ld [hli], a
+
+      	dec b
+      	jr nz, .changeLoopRight
+
+      	ld b, b
 	ret
 
 .left:
+
+	ld hl, TOP_RIGHT_VRAM_START_L
+	ld a, [hli]
+	ld e, a
+	ld a, [hli]
+	ld d, a
+
+	ld a, [hli]
+	ld b, a
+	ld a, [hli]
+	ld h, a
+	ld l, b
+
+	ld c, 21
+	ld a, [MAP + MAP_SIZE_X_OFF]
+	ld b, a
+
+.loopLeft:
+	ld a, [hl]
+	push af
+	and a, TILE_TEXTURE
+	ld [de], a
+
+	reg VRAM_BANK_SELECT, 1
+	pop af
+	and a, TILE_PALETTE
+	rra
+	rra
+	rra
+	rra
+	rra
+	ld [de], a
+	reset VRAM_BANK_SELECT
+
+	ld a, l
+	sub b
+	ld l, a
+	ld a, h
+	sbc $0
+	ld h, a
+
+	ld a, e
+	sub $20
+	ld e, a
+	ld a, d
+	sbc $00
+	or $98
+	and $9B
+	ld d, a
+
+	dec c
+	jr nz, .loopLeft
+
+	ld hl, BOTTOM_LEFT_VRAM_START_L
+	ld b, 4
+	ld a, [MAP + MAP_SIZE_X_OFF]
+	ld c, a
+
+.changeLoopLeft:
+      	ld a, [hl]
+      	sub $1
+      	ld [hli], a
+
+      	ld a, [hl]
+      	sbc $0
+      	or $98
+      	and $9B
+      	ld [hli], a
+
+      	ld a, [hl]
+      	sub $1
+      	ld [hli], a
+
+      	ld a, [hl]
+      	sbc $0
+      	ld [hli], a
+
+      	dec b
+      	jr nz, .changeLoopLeft
 	ret
+
+
 
 updateCameraV::
 	bit 7, d

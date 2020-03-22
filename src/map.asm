@@ -149,7 +149,7 @@ loadMap::
 	ld a, MAP_VRAM_START_TOP_RIGHT >> 8
 	ld [hli], a ; TOP_RIGHT_VRAM_START_H
 
-	ld a, [MAP + MAP_SIZE_X_OFF]
+	ld a, 21
 	add (MAP + MAP_SIZE_TILES_OFF) & $FF
 	ld [hli], a ; TOP_RIGHT_MAP_START_L
 

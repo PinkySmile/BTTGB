@@ -210,7 +210,10 @@ movePlayer::
 	ret nz
 .endNegX:
 
+	pop hl
+	push de
 	call updateCameraH
+	pop de
 
 	; Move the map ptr (position of the player on the map)
 	ld hl, MAP_PTR_L
@@ -308,7 +311,6 @@ moveY::
 
 .updateCamera:
 	pop de
-
 	jp updateCameraV
 
 
