@@ -148,15 +148,16 @@ executePlayerActions::
 
 .a::
 .up::
+	ld a, [PLAYER_STRUCT + BASIC_OBJECT_STRUCT_Y_SPEED_OFF]
+	cp 0
+	ret nz
+
 	call initGravity
 	ld hl, PLAYER_STRUCT + BASIC_OBJECT_STRUCT_Y_SPEED_OFF
 	ld [hl], -3
-;	ld [hl], -1
 	ret
 
 .down::
-;	ld hl, PLAYER_STRUCT + BASIC_OBJECT_STRUCT_Y_SPEED_OFF
-;	ld [hl], 1;-3
 	ret
 
 
