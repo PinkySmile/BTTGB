@@ -226,10 +226,18 @@ collidedBelow::
 	dec [hl]
 	ret
 
+collidedUp::
+	;ld b, b
+	ld hl, PLAYER_STRUCT + BASIC_OBJECT_STRUCT_Y_SPEED_OFF
+    inc [hl]
+   	ret
+
 moveY::
     ;check collisions on Y
 	call collideBelow
 	jr c, collidedBelow
+	call collideUp
+    jr c, collidedUp
 
 	ld a, [PLAYER_STRUCT + BASIC_OBJECT_STRUCT_Y_SPEED_OFF]
 	or a
@@ -382,7 +390,7 @@ collideRight::
 	scf ; set the carry flag
 	ret
 
-; Check left collisions for the player.
+; Check Below collisions for the player.
 ; Params:
 ;    None
 ; Return:
@@ -395,6 +403,48 @@ collideRight::
 collideBelow::
 	ld a, [MAP_PTR_H]
 	ld d, a
+	ld a, [MAP_PTR_L]
+	ld e, a ;Get the top left tile of the player
+
+	; Check for the upper half of the body.
+	ld a, [MAP + MAP_SIZE_X_OFF]
+	ld h, 0
+	ld l, a
+	add hl, de
+	ld a, [hl]
+	and TILE_IS_SOLID ; and clear the carry flag.
+	jr nz, .ok
+
+	inc hl
+	ld a, [hl]
+	and TILE_IS_SOLID
+	ret z
+
+	; Do not check collisions if the player moves to the right.
+.ok:
+	ld a, [PLAYER_STRUCT + BASIC_OBJECT_STRUCT_Y_SPEED_OFF]
+	bit 7, a ; bit clear the carry flag
+	ret nz
+	or a
+	ret z
+	ld b, a
+
+	scf ; set the carry flag
+	ret
+
+; Check Upper collisions for the player.
+; Params:
+;    None
+; Return:
+;    c -> set if the player collide.
+; Registers:
+;    af -> Not preserved
+;    bc -> Not preserved
+;    de -> Not preserved
+;    hl -> Not preserved
+collideUp::
+	ld a, [MAP_PTR_H]
+	ld d, aN
 	ld a, [MAP_PTR_L]
 	ld e, a ;Get the top left tile of the player
 
@@ -417,8 +467,6 @@ collideBelow::
 	ld a, [PLAYER_STRUCT + BASIC_OBJECT_STRUCT_Y_SPEED_OFF]
 	bit 7, a ; bit clear the carry flag
 	ret nz
-	or a
-	ret z
 	ld b, a
 
 	scf ; set the carry flag
