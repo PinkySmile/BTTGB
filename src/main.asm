@@ -132,6 +132,10 @@ mainMenu::
 
 ; Runs the main program
 run::
+	xor a
+	ld bc, 4
+	ld de, TIMER_REGISTER
+	call fillMemory
 	ld bc, bttChannelOne
 	ld de, bttIntroOne
 	ld hl, MUSIC_CHANNEL_1
@@ -189,6 +193,10 @@ run::
 	ld e, OBPI & $FF
 	ld bc, 8
 	call setGBCPalette
+
+	reg VRAM_BANK_SELECT, 1
+	reset $9C00
+	ld [VRAM_BANK_SELECT], a
 
 	reg LCD_CONTROL, LCD_BASE_CONTROL
 

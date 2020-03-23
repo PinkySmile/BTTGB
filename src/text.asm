@@ -1,6 +1,9 @@
 pressStart::
 	db "PRESS  START"
 pressStartEnd::
+finalScore::
+	db "FINAL TIME:"
+finalScoreEnd::
 nantes::
 	db "NANTES"
 nantesEnd::
