@@ -1,8 +1,8 @@
 allMaps::
 	dw MapTuto
 	db BANK(MapTuto)
-	;dw Map1
-	;db BANK(Map1)
+	dw Map1
+	db BANK(Map1)
 	dw Map2
 	db BANK(Map2)
 	dw Map3
