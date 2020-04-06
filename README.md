@@ -17,4 +17,4 @@ git clone https://github.com/Gegel85/BTTGB
 cd BTTGB
 make
 ```
-Try it here ! https://gegel85.github.io/BTTGB/play
+Try it here ! https://gegel85.github.io/GameBoy-Online/
